@@ -8,6 +8,8 @@ import {
 } from 'firebase/firestore';
 import { type User } from '@posad/react-core/types';
 
+export * from './context';
+
 const config = {
   apiKey: 'AIzaSyD9gRTS4ogqkDA98AwCKpt4x6wp-OHXz_A',
   authDomain: 'posad-8e52c.firebaseapp.com',

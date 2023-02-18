@@ -2,6 +2,8 @@ import { FC } from 'react';
 import { Icon, IconHome, IconBasket, IconLogout } from '@tabler/icons-react';
 import { clsx } from 'clsx';
 import { NavLink } from 'react-router-dom';
+import { signOut } from 'firebase/auth';
+import { auth } from '@posad/react-core/libs/firebase';
 
 export type AppDrawerProps = {
   className?: string;
@@ -66,7 +68,7 @@ const AppDrawer: FC<AppDrawerProps> = ({ className }) => {
         </div>
       </div>
 
-      <div
+      <button
         className={clsx(
           'flex items-center gap-3',
           'px-4 py-3',
@@ -74,10 +76,12 @@ const AppDrawer: FC<AppDrawerProps> = ({ className }) => {
           'transition duration-200',
           'hover:text-white hover:bg-primary-blue'
         )}
+        type="button"
+        onClick={() => signOut(auth)}
       >
         <IconLogout size={24} className="text-current" />
         <div className="text-current">Logout</div>
-      </div>
+      </button>
     </div>
   );
 };
