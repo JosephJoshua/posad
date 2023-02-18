@@ -14,7 +14,11 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@posad/react-core/layouts/dashboard": [
+        "libs/react-core/src/layouts/dashboard/index.ts"
+      ]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }
