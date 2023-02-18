@@ -1,8 +1,12 @@
-import { FC, useEffect } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { Input } from '@posad/react-core/components/input';
 import clsx from 'clsx';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import {
+  loginWithCredentials,
+  loginWithGoogle,
+} from '@posad/react-features/auth';
 import * as yup from 'yup';
 
 import googleIcon from '../assets/icons/google.svg';
@@ -25,6 +29,8 @@ const LoginPage: FC = () => {
     mode: 'onChange',
   });
 
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
   /**
    * Prompt the form to validate itself
    * immediately after the page is loaded.
@@ -37,8 +43,17 @@ const LoginPage: FC = () => {
     document.body.classList.add('bg-slate-50');
   }, []);
 
+  const handleError = (err: unknown) => {
+    if (err instanceof Error) setErrorMessage(err.message);
+    else setErrorMessage('An unknown error occured! Please try again.');
+  };
+
   const handleFormSubmit = (values: LoginFormValues) => {
-    console.log(values);
+    loginWithCredentials(values).catch((err) => handleError(err));
+  };
+
+  const handleGoogleLogin = () => {
+    loginWithGoogle().catch((err) => handleError(err));
   };
 
   const isFormValid = Object.values(errors).every((error) => error == null);
@@ -92,6 +107,8 @@ const LoginPage: FC = () => {
             >
               Login
             </button>
+
+            <div className="text-red-500 mt-2">{errorMessage}</div>
           </form>
 
           <div className="flex items-center mt-6 -mx-1.5">
@@ -111,6 +128,7 @@ const LoginPage: FC = () => {
                 'transition duration-200',
                 'hover:bg-gray-100'
               )}
+              onClick={() => handleGoogleLogin()}
             >
               <img
                 src={googleIcon}

@@ -15,15 +15,18 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@posad/react-core/layouts/dashboard": [
-        "libs/react-core/src/layouts/dashboard/index.ts"
-      ],
       "@posad/react-core/components/input": [
         "libs/react-core/src/components/input/index.ts"
       ],
+      "@posad/react-core/layouts/dashboard": [
+        "libs/react-core/src/layouts/dashboard/index.ts"
+      ],
       "@posad/react-core/libs/firebase": [
         "libs/react-core/src/libs/firebase/index.ts"
-      ]
+      ],
+      "@posad/react-core/types": ["libs/react-core/src/types/index.ts"],
+
+      "@posad/react-features/auth": ["libs/react-features/src/auth/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
