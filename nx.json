@@ -3,10 +3,9 @@
   "npmScope": "posad",
   "tasksRunnerOptions": {
     "default": {
-      "runner": "@nrwl/nx-cloud",
+      "runner": "@vercel/remote-nx",
       "options": {
-        "cacheableOperations": ["build", "lint", "test", "e2e"],
-        "accessToken": "NmI4MWQxODYtYjMyNC00NGVmLWIyNDMtMTcwM2I4OTA1MGYzfHJlYWQtd3JpdGU="
+        "cacheableOperations": ["build", "lint", "test", "e2e"]
       }
     }
   },
