@@ -43,6 +43,7 @@ const AppDrawer: FC<AppDrawerProps> = ({ className }) => {
 
             return (
               <NavLink
+                key={item.title + item.to}
                 to={item.to}
                 className={({ isActive }) =>
                   clsx(
