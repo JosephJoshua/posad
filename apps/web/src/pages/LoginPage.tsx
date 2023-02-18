@@ -1,23 +1,54 @@
-import { FC, FormEvent, useEffect } from 'react';
+import { FC, useEffect } from 'react';
 import { Input } from '@posad/react-core/components/input';
-import googleIcon from '../assets/icons/google.svg';
 import clsx from 'clsx';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
+
+import googleIcon from '../assets/icons/google.svg';
+
+const loginFormSchema = yup.object({
+  email: yup.string().email().required(),
+  password: yup.string().min(1).required(),
+});
+
+type LoginFormValues = yup.InferType<typeof loginFormSchema>;
 
 const LoginPage: FC = () => {
-  useEffect(() => {
-    document.body.classList.add('bg-slate-50');
+  const {
+    register,
+    handleSubmit,
+    trigger,
+    formState: { errors },
+  } = useForm<LoginFormValues>({
+    resolver: yupResolver(loginFormSchema),
+    mode: 'onChange',
   });
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  /**
+   * Prompt the form to validate itself
+   * immediately after the page is loaded.
+   */
+  useEffect(() => {
+    trigger();
+  }, [trigger]);
+
+  useEffect(() => {
+    document.body.classList.add('bg-slate-50');
+  }, []);
+
+  const handleFormSubmit = (values: LoginFormValues) => {
+    console.log(values);
   };
+
+  const isFormValid = Object.values(errors).every((error) => error == null);
 
   return (
     <>
       <h1 className="text-3xl font-semibold text-center mt-12">posad</h1>
       <div className="flex justify-center items-center mt-6">
         <div className="flex flex-col w-[478px] bg-white border border-slate-100 shadow-md shadow-slate-200/50 px-6 pt-4 pb-8">
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit(handleFormSubmit)}>
             <h2 className="text-2xl font-medium text-center mb-8">
               Welcome Back!
             </h2>
@@ -31,8 +62,8 @@ const LoginPage: FC = () => {
                 <Input
                   type="email"
                   inputMode="email"
-                  name="email"
                   aria-required="true"
+                  {...register('email')}
                 />
               </div>
 
@@ -41,7 +72,11 @@ const LoginPage: FC = () => {
                   Password
                 </label>
 
-                <Input type="password" name="password" aria-required="true" />
+                <Input
+                  type="password"
+                  aria-required="true"
+                  {...register('password')}
+                />
               </div>
             </div>
 
@@ -50,8 +85,10 @@ const LoginPage: FC = () => {
               className={clsx(
                 'mt-4 w-full bg-primary-blue text-white py-2.5 rounded-md',
                 'transition duratino-200',
+                'disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed',
                 'hover:bg-primary-blue/80'
               )}
+              disabled={!isFormValid}
             >
               Login
             </button>
