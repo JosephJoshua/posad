@@ -8,6 +8,7 @@ import {
   authenticateWithGoogle,
 } from '@posad/react-features/auth';
 import { Link } from 'react-router-dom';
+import { Button } from '@posad/react-core/components/button';
 import * as yup from 'yup';
 
 import googleIcon from '../assets/icons/google.svg';
@@ -108,20 +109,15 @@ const LoginPage: FC = () => {
               </div>
             </div>
 
-            <button
+            <Button
               type="submit"
-              className={clsx(
-                'mt-4 w-full bg-primary-blue text-white py-2.5 rounded-md',
-                'flex justify-center',
-                'transition duratino-200',
-                'hover:bg-primary-blue/80',
-                'disabled:cursor-not-allowed',
-                !isLoading && 'disabled:bg-gray-200 disabled:text-gray-400'
-              )}
-              disabled={!isFormValid || isLoading}
+              variant="filled"
+              className="mt-4 w-full"
+              disabled={!isFormValid}
+              isLoading={isLoading}
             >
-              {isLoading ? <DotsSpinner className="text-white" /> : 'Register'}
-            </button>
+              Login
+            </Button>
 
             <div className="text-red-500 mt-2">{errorMessage}</div>
           </form>
@@ -135,14 +131,8 @@ const LoginPage: FC = () => {
           </div>
 
           <div className="flex flex-col mt-6">
-            <button
-              type="button"
-              className={clsx(
-                'relative py-2.5',
-                'border-slate-300 border rounded-md',
-                'transition duration-200',
-                'hover:bg-gray-100'
-              )}
+            <Button
+              variant="outlined"
               onClick={() => handleGoogleAuthentication()}
             >
               <img
@@ -154,7 +144,7 @@ const LoginPage: FC = () => {
               />
 
               <div>Google</div>
-            </button>
+            </Button>
           </div>
 
           <div className="mt-6">

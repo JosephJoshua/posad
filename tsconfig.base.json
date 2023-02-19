@@ -18,6 +18,9 @@
       "@posad/react-core/components/input": [
         "libs/react-core/src/components/input/index.ts"
       ],
+      "@posad/react-core/components/button": [
+        "libs/react-core/src/components/button/index.ts"
+      ],
       "@posad/react-core/layouts/dashboard": [
         "libs/react-core/src/layouts/dashboard/index.ts"
       ],

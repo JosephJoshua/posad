@@ -4,6 +4,7 @@ import { clsx } from 'clsx';
 import { NavLink } from 'react-router-dom';
 import { signOut } from 'firebase/auth';
 import { auth } from '@posad/react-core/libs/firebase';
+import { Button } from '@posad/react-core/components/button';
 
 export type AppDrawerProps = {
   className?: string;
@@ -68,20 +69,14 @@ const AppDrawer: FC<AppDrawerProps> = ({ className }) => {
         </div>
       </div>
 
-      <button
-        className={clsx(
-          'flex items-center gap-3',
-          'px-4 py-3',
-          'text-slate-600 rounded-md cursor-pointer',
-          'transition duration-200',
-          'hover:text-white hover:bg-primary-blue'
-        )}
-        type="button"
+      <Button
+        variant="ghost"
+        className="gap-3 !justify-start"
         onClick={() => signOut(auth)}
       >
         <IconLogout size={24} className="text-current" />
         <div className="text-current">Logout</div>
-      </button>
+      </Button>
     </div>
   );
 };
