@@ -1,5 +1,5 @@
 import { useAuthContext } from '@posad/react-core/libs/firebase';
-import { FC, PropsWithChildren } from 'react';
+import { FC } from 'react';
 import {
   Route,
   createBrowserRouter,
@@ -9,6 +9,7 @@ import {
 } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
 
 const ProtectedRoute: FC = () => {
   const { isLoading, isAuthenticated } = useAuthContext();
@@ -46,6 +47,7 @@ const routes = (
 
     <Route path="/auth" element={<AuthRoute />}>
       <Route path="login" element={<LoginPage />} />
+      <Route path="register" element={<RegisterPage />} />
     </Route>
   </>
 );

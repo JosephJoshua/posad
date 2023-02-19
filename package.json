@@ -61,6 +61,7 @@
     "react-hook-form": "^7.43.1",
     "react-router-dom": "^6.8.1",
     "tslib": "^2.3.0",
+    "vite-plugin-svgr": "^2.4.0",
     "yup": "^1.0.0"
   }
 }

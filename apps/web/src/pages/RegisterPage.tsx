@@ -4,30 +4,74 @@ import clsx from 'clsx';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
-  loginWithCredentials,
   authenticateWithGoogle,
+  registerWithCredentials,
 } from '@posad/react-features/auth';
 import { Link } from 'react-router-dom';
 import * as yup from 'yup';
 
-import googleIcon from '../assets/icons/google.svg';
 import { ReactComponent as DotsSpinner } from '../assets/spinners/dots.svg';
+import googleIcon from '../assets/icons/google.svg';
 
-const loginFormSchema = yup.object({
+const registerFormSchema = yup.object({
+  name: yup.string().required(),
   email: yup.string().email().required(),
-  password: yup.string().required(),
+  password: yup
+    .string()
+    .test((val, ctx) => {
+      const createError = (message: string) =>
+        ctx.createError({
+          path: ctx.path,
+          message,
+        });
+
+      if (val == null || val.length < 8 || val.length > 32) {
+        return createError(
+          'Password must be betweeen 8 and 32 characters long.'
+        );
+      }
+
+      if (!/^(?=.*[a-z])/.test(val)) {
+        return createError(
+          'Password must contain at least 1 lowercase character.'
+        );
+      }
+
+      if (!/^(?=.*[A-Z])/.test(val)) {
+        return createError(
+          'Password must contain at least 1 uppercase character.'
+        );
+      }
+
+      if (!/^(?=.*[0-9])/.test(val)) {
+        return createError('Password must contain at least 1 digit.');
+      }
+
+      if (!/^(?=.*[!@#$%^&*])/.test(val)) {
+        return createError(
+          'Password must contain at least 1 special character (!@#$%^&*).'
+        );
+      }
+
+      return true;
+    })
+    .required(),
+  passwordConfirmation: yup
+    .string()
+    .required("Password doesn't match.")
+    .oneOf([yup.ref('password')], "Password doesn't match."),
 });
 
-type LoginFormValues = yup.InferType<typeof loginFormSchema>;
+type RegisterFormValues = yup.InferType<typeof registerFormSchema>;
 
-const LoginPage: FC = () => {
+const RegisterPage: FC = () => {
   const {
     register,
     handleSubmit,
     trigger,
     formState: { errors },
-  } = useForm<LoginFormValues>({
-    resolver: yupResolver(loginFormSchema),
+  } = useForm<RegisterFormValues>({
+    resolver: yupResolver(registerFormSchema),
     mode: 'onChange',
   });
 
@@ -51,11 +95,11 @@ const LoginPage: FC = () => {
     else setErrorMessage('An unknown error occured! Please try again.');
   };
 
-  const handleFormSubmit = (values: LoginFormValues) => {
+  const handleFormSubmit = (values: RegisterFormValues) => {
     setErrorMessage(null);
     setLoading(true);
 
-    loginWithCredentials(values)
+    registerWithCredentials(values)
       .catch((err) => handleError(err))
       .finally(() => setLoading(false));
   };
@@ -77,11 +121,17 @@ const LoginPage: FC = () => {
       <div className="flex justify-center items-center px-6 mt-6 mb-12">
         <div className="flex flex-col w-full max-w-[478px] bg-white border border-slate-100 shadow-md shadow-slate-200/50 px-6 pt-4 pb-8">
           <form onSubmit={handleSubmit(handleFormSubmit)}>
-            <h2 className="text-2xl font-medium text-center mb-8">
-              Welcome Back!
-            </h2>
+            <h2 className="text-2xl font-medium text-center mb-8">Welcome!</h2>
 
             <div className="flex flex-col gap-6">
+              <div>
+                <label htmlFor="email" className="mb-1">
+                  Name
+                </label>
+
+                <Input type="text" aria-required="true" {...register('name')} />
+              </div>
+
               <div>
                 <label htmlFor="email" className="mb-1">
                   Email Address
@@ -105,6 +155,30 @@ const LoginPage: FC = () => {
                   aria-required="true"
                   {...register('password')}
                 />
+
+                {errors.password != null && (
+                  <div className="text-red-500 mt-2">
+                    {errors.password?.message}
+                  </div>
+                )}
+              </div>
+
+              <div>
+                <label className="mb-1" htmlFor="password">
+                  Confirm Password
+                </label>
+
+                <Input
+                  type="password"
+                  aria-required="true"
+                  {...register('passwordConfirmation')}
+                />
+
+                {errors.passwordConfirmation != null && (
+                  <div className="text-red-500 mt-2">
+                    {errors.passwordConfirmation?.message}
+                  </div>
+                )}
               </div>
             </div>
 
@@ -128,8 +202,8 @@ const LoginPage: FC = () => {
 
           <div className="flex items-center mt-6 -mx-1.5">
             <div className="h-px bg-slate-300 flex-1"></div>
-            <div className="px-2 flex-1 text-center text-slate-500 leading-6">
-              or login with
+            <div className="px-2 flex-1 text-center text-slate-500 leading-5">
+              or register with
             </div>
             <div className="h-px bg-slate-300 flex-1"></div>
           </div>
@@ -158,8 +232,8 @@ const LoginPage: FC = () => {
           </div>
 
           <div className="mt-6">
-            <span className="text-gray-500">Don't have an account yet? </span>
-            <Link to="/auth/register">Make one now!</Link>
+            <span className="text-gray-500">Already have an account? </span>
+            <Link to="/auth/login">Login now!</Link>
           </div>
         </div>
       </div>
@@ -167,4 +241,4 @@ const LoginPage: FC = () => {
   );
 };
 
-export default LoginPage;
+export default RegisterPage;
