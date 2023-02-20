@@ -1,11 +1,12 @@
+import { DashboardLayout } from '@posad/react-core/layouts/dashboard';
 import { useAuthContext } from '@posad/react-core/libs/firebase';
 import { FC } from 'react';
 import {
+  Navigate,
+  Outlet,
   Route,
   createBrowserRouter,
   createRoutesFromElements,
-  Navigate,
-  Outlet,
 } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';

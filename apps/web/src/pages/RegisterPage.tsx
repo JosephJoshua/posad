@@ -1,6 +1,5 @@
 import { FC, useEffect, useState } from 'react';
 import { Input } from '@posad/react-core/components/input';
-import clsx from 'clsx';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
@@ -10,7 +9,6 @@ import {
 import { Link } from 'react-router-dom';
 import * as yup from 'yup';
 
-import { ReactComponent as DotsSpinner } from '../assets/spinners/dots.svg';
 import googleIcon from '../assets/icons/google.svg';
 import { Button } from '@posad/react-core/components/button';
 

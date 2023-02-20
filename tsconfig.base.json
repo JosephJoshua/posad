@@ -29,7 +29,8 @@
       ],
       "@posad/react-core/types": ["libs/react-core/src/types/index.ts"],
 
-      "@posad/react-features/auth": ["libs/react-features/src/auth/index.ts"]
+      "@posad/react-features/auth": ["libs/react-features/src/auth/index.ts"],
+      "@posad/react-features/home": ["libs/react-features/src/home/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

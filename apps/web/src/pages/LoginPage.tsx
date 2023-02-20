@@ -1,18 +1,16 @@
 import { FC, useEffect, useState } from 'react';
 import { Input } from '@posad/react-core/components/input';
-import clsx from 'clsx';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
-  loginWithCredentials,
   authenticateWithGoogle,
+  loginWithCredentials,
 } from '@posad/react-features/auth';
 import { Link } from 'react-router-dom';
 import { Button } from '@posad/react-core/components/button';
 import * as yup from 'yup';
 
 import googleIcon from '../assets/icons/google.svg';
-import { ReactComponent as DotsSpinner } from '../assets/spinners/dots.svg';
 
 const loginFormSchema = yup.object({
   email: yup.string().email().required(),

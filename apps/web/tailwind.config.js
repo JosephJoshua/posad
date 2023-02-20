@@ -18,8 +18,9 @@ module.exports = {
     extend: {
       colors: {
         'primary-blue': '#0a085f',
+        'dark-gray': '#1e1e1e',
       },
     },
   },
-  plugins: [require('@tailwindcss/forms')],
+  plugins: [require('@tailwindcss/forms'), require('tailwind-scrollbar')],
 };
