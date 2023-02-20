@@ -1,6 +1,6 @@
 import { useCallback, useMemo } from 'react';
 import { GridRows, GridColumns } from '@visx/grid';
-import { AreaClosed, Bar, Line } from '@Visx/shape';
+import { AreaClosed, Bar, Line } from '@visx/shape';
 import { scaleLinear, scaleUtc } from '@visx/scale';
 import { bisector, extent, max } from 'd3-array';
 import { curveNatural } from '@visx/curve';
