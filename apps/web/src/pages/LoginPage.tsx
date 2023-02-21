@@ -1,4 +1,5 @@
 import { FC, useEffect, useState } from 'react';
+import { useBodyClass, useTitle } from '@posad/react-core/hooks';
 import { Input } from '@posad/react-core/components/input';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -11,7 +12,6 @@ import { Button } from '@posad/react-core/components/button';
 import * as yup from 'yup';
 
 import googleIcon from '../assets/icons/google.svg';
-import { useBodyClass, useTitle } from 'libs/react-core/src/hooks';
 
 const loginFormSchema = yup.object({
   email: yup.string().email().required(),

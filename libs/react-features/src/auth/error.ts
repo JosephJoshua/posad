@@ -4,6 +4,18 @@ import { AuthErrorCodes } from 'firebase/auth';
 export const handleAuthError = (err: unknown) => {
   if (err instanceof FirebaseError) {
     switch (err.code) {
+      /**
+       * We don't want to show an error if the popup was closed.
+       */
+      case AuthErrorCodes.POPUP_CLOSED_BY_USER:
+      case AuthErrorCodes.EXPIRED_POPUP_REQUEST:
+        return;
+
+      case AuthErrorCodes.POPUP_BLOCKED:
+        throw new Error(
+          'Popup was blocked! Please enable popups for this website in your browser settings.'
+        );
+
       case AuthErrorCodes.EMAIL_EXISTS:
         throw new Error('This email is already in use.');
 

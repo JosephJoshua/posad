@@ -1,10 +1,10 @@
 import { FC } from 'react';
 import { DashboardLayout } from '@posad/react-core/layouts/dashboard';
+import { useTitle } from '@posad/react-core/hooks';
 import {
   WentBadContainer,
   ExpiringSoonContainer,
 } from '@posad/react-features/home';
-import { useTitle } from 'libs/react-core/src/hooks';
 
 const HomePage: FC = () => {
   useTitle('Home | Posad');
