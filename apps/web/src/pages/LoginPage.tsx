@@ -11,6 +11,7 @@ import { Button } from '@posad/react-core/components/button';
 import * as yup from 'yup';
 
 import googleIcon from '../assets/icons/google.svg';
+import { useBodyClass, useTitle } from 'libs/react-core/src/hooks';
 
 const loginFormSchema = yup.object({
   email: yup.string().email().required(),
@@ -41,10 +42,8 @@ const LoginPage: FC = () => {
     trigger();
   }, [trigger]);
 
-  useEffect(() => {
-    document.body.classList.add('bg-slate-50');
-    document.title = 'Login | Posad';
-  }, []);
+  useTitle('Login | Posad');
+  useBodyClass('bg-slate-50');
 
   const handleError = (err: unknown) => {
     if (err instanceof Error) setErrorMessage(err.message);

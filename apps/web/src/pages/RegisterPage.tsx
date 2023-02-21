@@ -11,6 +11,7 @@ import * as yup from 'yup';
 
 import googleIcon from '../assets/icons/google.svg';
 import { Button } from '@posad/react-core/components/button';
+import { useBodyClass, useTitle } from 'libs/react-core/src/hooks';
 
 const registerFormSchema = yup.object({
   name: yup.string().required(),
@@ -85,10 +86,8 @@ const RegisterPage: FC = () => {
     trigger();
   }, [trigger]);
 
-  useEffect(() => {
-    document.title = 'Register | Posad';
-    document.body.classList.add('bg-slate-50');
-  }, []);
+  useTitle('Register | Posad');
+  useBodyClass('bg-slate-50');
 
   const handleError = (err: unknown) => {
     if (err instanceof Error) setErrorMessage(err.message);

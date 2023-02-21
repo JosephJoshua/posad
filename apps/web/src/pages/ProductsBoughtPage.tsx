@@ -1,11 +1,10 @@
-import { FC, useEffect } from 'react';
+import { FC } from 'react';
 import { DashboardLayout } from '@posad/react-core/layouts/dashboard';
 import { ProductList } from '@posad/react-features/products-bought';
+import { useTitle } from 'libs/react-core/src/hooks';
 
 const ProductsBoughtPage: FC = () => {
-  useEffect(() => {
-    document.title = 'Products Bought | Posad';
-  }, []);
+  useTitle('Products Bought | Posad');
 
   return (
     <DashboardLayout className="flex flex-col">

@@ -1,4 +1,3 @@
-import { IconClock } from '@tabler/icons-react';
 import { FC, useRef, useState } from 'react';
 import clsx from 'clsx';
 import useResizeObserver from '@react-hook/resize-observer';
