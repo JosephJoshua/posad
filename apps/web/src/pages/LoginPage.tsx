@@ -25,7 +25,7 @@ const LoginPage: FC = () => {
     register,
     handleSubmit,
     trigger,
-    formState: { errors },
+    formState: { errors, isValid },
   } = useForm<LoginFormValues>({
     resolver: yupResolver(loginFormSchema),
     mode: 'onChange',
@@ -68,8 +68,6 @@ const LoginPage: FC = () => {
       .finally(() => setLoading(false));
   };
 
-  const isFormValid = Object.values(errors).every((error) => error == null);
-
   return (
     <>
       <h1 className="text-3xl font-semibold text-center mt-12">posad</h1>
@@ -80,7 +78,7 @@ const LoginPage: FC = () => {
               Welcome Back!
             </h2>
 
-            <div className="flex flex-col gap-6">
+            <fieldset className="flex flex-col gap-6" disabled={isLoading}>
               <div>
                 <label htmlFor="email" className="mb-1">
                   Email Address
@@ -105,13 +103,13 @@ const LoginPage: FC = () => {
                   {...register('password')}
                 />
               </div>
-            </div>
+            </fieldset>
 
             <Button
               type="submit"
               variant="filled"
               className="mt-4 w-full"
-              disabled={!isFormValid}
+              disabled={!isValid}
               isLoading={isLoading}
             >
               Login

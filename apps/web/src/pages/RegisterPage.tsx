@@ -1,6 +1,7 @@
 import { FC, useEffect, useState } from 'react';
 import { useBodyClass, useTitle } from '@posad/react-core/hooks';
 import { Input } from '@posad/react-core/components/input';
+import { Button } from '@posad/react-core/components/button';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
@@ -11,7 +12,6 @@ import { Link } from 'react-router-dom';
 import * as yup from 'yup';
 
 import googleIcon from '../assets/icons/google.svg';
-import { Button } from '@posad/react-core/components/button';
 
 const registerFormSchema = yup.object({
   name: yup.string().required(),
@@ -69,7 +69,7 @@ const RegisterPage: FC = () => {
     register,
     handleSubmit,
     trigger,
-    formState: { errors },
+    formState: { errors, dirtyFields, isValid },
   } = useForm<RegisterFormValues>({
     resolver: yupResolver(registerFormSchema),
     mode: 'onChange',
@@ -112,8 +112,6 @@ const RegisterPage: FC = () => {
       .finally(() => setLoading(false));
   };
 
-  const isFormValid = Object.values(errors).every((error) => error == null);
-
   return (
     <>
       <h1 className="text-3xl font-semibold text-center mt-12">posad</h1>
@@ -122,7 +120,7 @@ const RegisterPage: FC = () => {
           <form onSubmit={handleSubmit(handleFormSubmit)}>
             <h2 className="text-2xl font-medium text-center mb-8">Welcome!</h2>
 
-            <div className="flex flex-col gap-6">
+            <fieldset className="flex flex-col gap-6" disabled={isLoading}>
               <div>
                 <label htmlFor="email" className="mb-1">
                   Name
@@ -155,7 +153,7 @@ const RegisterPage: FC = () => {
                   {...register('password')}
                 />
 
-                {errors.password != null && (
+                {errors.password != null && dirtyFields.password && (
                   <div className="text-red-500 mt-2">
                     {errors.password?.message}
                   </div>
@@ -173,19 +171,20 @@ const RegisterPage: FC = () => {
                   {...register('passwordConfirmation')}
                 />
 
-                {errors.passwordConfirmation != null && (
-                  <div className="text-red-500 mt-2">
-                    {errors.passwordConfirmation?.message}
-                  </div>
-                )}
+                {errors.passwordConfirmation != null &&
+                  dirtyFields.passwordConfirmation && (
+                    <div className="text-red-500 mt-2">
+                      {errors.passwordConfirmation?.message}
+                    </div>
+                  )}
               </div>
-            </div>
+            </fieldset>
 
             <Button
               type="submit"
               variant="filled"
               className="mt-4 w-full"
-              disabled={!isFormValid}
+              disabled={!isValid}
               isLoading={isLoading}
             >
               Register
