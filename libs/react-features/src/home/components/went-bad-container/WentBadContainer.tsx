@@ -18,14 +18,14 @@ const WentBadContainer: FC = () => {
 
   return (
     <div className="bg-blue-500 text-white p-5 rounded-2xl">
-      <div className="flex justify-between">
-        <h2 className="font-medium text-xl">% Went bad</h2>
+      <div className="flex justify-between items-center">
+        <h2 className="font-medium text-xl">Products went bad</h2>
 
         <Listbox value={selectedTimeframe} onChange={setSelectedTimeframe}>
           <div className="relative">
             <Listbox.Button
               className={clsx(
-                'relative w-full cursor-default rounded-lg bg-white py-2 pl-3 pr-10 text-left shadow-md',
+                'relative w-full cursor-pointer rounded-lg bg-white py-2 pl-3 pr-10 text-left shadow-md',
                 'focus:outline-none focus-visible:border-primary-blue focus-visible:ring-2 focus-visible:ring-primary-blue focus-visible:ring-opacity-75',
                 'sm:text-sm'
               )}
@@ -61,7 +61,7 @@ const WentBadContainer: FC = () => {
                     key={key}
                     className={({ active }) =>
                       clsx(
-                        'relative cursor-default select-none py-2 pl-10 pr-4 text-gray-900',
+                        'relative cursor-pointer select-none py-2 pl-10 pr-4 text-gray-900',
                         active && 'bg-gray-100'
                       )
                     }

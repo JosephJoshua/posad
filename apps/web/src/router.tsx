@@ -10,6 +10,7 @@ import {
 } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
+import ProductsBoughtPage from './pages/ProductsBoughtPage';
 import RegisterPage from './pages/RegisterPage';
 
 const ProtectedRoute: FC = () => {
@@ -44,6 +45,7 @@ const routes = (
   <>
     <Route path="/" element={<ProtectedRoute />}>
       <Route index element={<HomePage />} />
+      <Route path="products-bought" element={<ProductsBoughtPage />} />
     </Route>
 
     <Route path="/auth" element={<AuthRoute />}>

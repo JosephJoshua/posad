@@ -1,4 +1,4 @@
-import { FC, useRef, useState } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
 import { DashboardLayout } from '@posad/react-core/layouts/dashboard';
 import { IconClock } from '@tabler/icons-react';
 import { WentBadContainer } from '@posad/react-features/home';
@@ -17,6 +17,10 @@ const HomePage: FC = () => {
   useResizeObserver(expiringSoonContainer, (entry) =>
     checkExpireContainerOverflow(entry.target)
   );
+
+  useEffect(() => {
+    document.title = 'Home | Posad';
+  }, []);
 
   return (
     <DashboardLayout className="flex flex-col gap-4">

@@ -43,6 +43,7 @@ const LoginPage: FC = () => {
 
   useEffect(() => {
     document.body.classList.add('bg-slate-50');
+    document.title = 'Login | Posad';
   }, []);
 
   const handleError = (err: unknown) => {

@@ -86,6 +86,7 @@ const RegisterPage: FC = () => {
   }, [trigger]);
 
   useEffect(() => {
+    document.title = 'Register | Posad';
     document.body.classList.add('bg-slate-50');
   }, []);
 

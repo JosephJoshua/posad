@@ -2,11 +2,13 @@ const { join } = require('path');
 const { createGlobPatternsForDependencies } = require('@nrwl/react/tailwind');
 
 const defaultTheme = require('tailwindcss/defaultTheme');
-const { default: plugin } = require('tailwindcss');
 const contentGlob = '**/*!(*.stories|*.spec).{ts,tsx,html}';
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  future: {
+    hoverOnlyWhenSupported: true,
+  },
   content: [
     join(__dirname, `src/${contentGlob}`),
     ...createGlobPatternsForDependencies(__dirname, contentGlob),

@@ -13,7 +13,7 @@ type ButtonAttributes = DetailedHTMLProps<
 export type ButtonProps = Omit<ButtonAttributes, 'value'> & {
   spinnerClassName?: string;
   isLoading?: boolean;
-  variant: ButtonVariants;
+  variant?: ButtonVariants;
 };
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
@@ -31,8 +31,8 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     ref
   ) => {
     const baseStyles = clsx(
-      'relative px-4 py-2.5 rounded-md',
-      'flex justify-center',
+      'group relative px-4 py-2.5 rounded-md',
+      'flex items-center justify-center',
       'transition duration-200',
       'disabled:cursor-not-allowed',
       !isLoading && 'disabled:bg-gray-200 disabled:text-gray-400'
@@ -59,11 +59,18 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         type={type ?? 'button'}
         disabled={disabled || isLoading}
-        className={clsx(baseStyles, variantStyles[variant], className)}
+        className={clsx(
+          baseStyles,
+          variant && variantStyles[variant],
+          className
+        )}
       >
         {isLoading ? (
           <DotsSpinner
-            className={clsx(variantSpinnerStyles[variant], spinnerClassName)}
+            className={clsx(
+              variant && variantSpinnerStyles[variant],
+              spinnerClassName
+            )}
           />
         ) : (
           children

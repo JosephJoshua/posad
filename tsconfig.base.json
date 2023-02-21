@@ -21,6 +21,9 @@
       "@posad/react-core/components/button": [
         "libs/react-core/src/components/button/index.ts"
       ],
+      "@posad/react-core/components/icon-button": [
+        "libs/react-core/src/components/icon-button/index.ts"
+      ],
       "@posad/react-core/layouts/dashboard": [
         "libs/react-core/src/layouts/dashboard/index.ts"
       ],
@@ -30,7 +33,10 @@
       "@posad/react-core/types": ["libs/react-core/src/types/index.ts"],
 
       "@posad/react-features/auth": ["libs/react-features/src/auth/index.ts"],
-      "@posad/react-features/home": ["libs/react-features/src/home/index.ts"]
+      "@posad/react-features/home": ["libs/react-features/src/home/index.ts"],
+      "@posad/react-features/products-bought": [
+        "libs/react-features/src/products-bought/index.ts"
+      ]
     }
   },
   "exclude": ["node_modules", "tmp"]
