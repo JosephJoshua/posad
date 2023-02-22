@@ -6,9 +6,10 @@ import dayjs from 'dayjs';
 
 export type ProductItemProps = {
   product: ExpiringProduct;
+  onDelete: () => void;
 };
 
-const ProductItem: FC<ProductItemProps> = ({ product }) => {
+const ProductItem: FC<ProductItemProps> = ({ product, onDelete }) => {
   return (
     <li className="flex justify-between items-center border-b border-b-gray-200 pr-2 pb-3 gap-4 cursor-pointer">
       <div className="flex items-center gap-4">
@@ -27,7 +28,11 @@ const ProductItem: FC<ProductItemProps> = ({ product }) => {
 
       <div className="flex gap-2">
         <IconButton icon={IconEdit} label="Edit" />
-        <IconButton icon={IconTrash} label="Delete" />
+        <IconButton
+          icon={IconTrash}
+          label="Delete"
+          onClick={() => onDelete()}
+        />
       </div>
     </li>
   );

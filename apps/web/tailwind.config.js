@@ -5,13 +5,6 @@ const defaultTheme = require('tailwindcss/defaultTheme');
 const path = require('path');
 const contentGlob = '**/*!(*.stories|*.spec).{ts,tsx,html}';
 
-console.log(
-  path.join(
-    path.dirname(require.resolve('react-tailwindcss-datepicker')),
-    'dist/index.esm.js'
-  )
-);
-
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   darkMode: 'class',

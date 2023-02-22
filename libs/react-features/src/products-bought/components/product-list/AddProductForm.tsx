@@ -10,7 +10,6 @@ import Datepicker from 'react-tailwindcss-datepicker';
 import { addDoc, Timestamp } from 'firebase/firestore';
 import { collections, useAuthContext } from '@posad/react-core/libs/firebase';
 import * as yup from 'yup';
-import { DateValueType } from 'react-tailwindcss-datepicker/dist/types';
 
 export type AddProductFormProps = {
   onClose?: () => void;
@@ -27,9 +26,7 @@ const AddProductForm: FC<AddProductFormProps> = ({ onClose }) => {
   const { firebaseUser } = useAuthContext();
 
   const containerRef = useRef<HTMLFormElement>(null);
-
   const [isLoading, setLoading] = useState<boolean>(false);
-  const [expirationDate, setExpirationDate] = useState<DateValueType>(null);
 
   const {
     register,
@@ -61,7 +58,13 @@ const AddProductForm: FC<AddProductFormProps> = ({ onClose }) => {
 
     setLoading(true);
 
-    return addDoc(collections.expiringProducts(firebaseUser.uid, 'default'), {
+    /**
+     * TODO: change
+     */
+    const sectionId = 'default';
+
+    return addDoc(collections.expiringProducts(firebaseUser.uid, sectionId), {
+      sectionId,
       name: values.name,
       imageUrl: 'test',
       expirationDate: Timestamp.fromDate(values.expirationDate),
@@ -108,7 +111,7 @@ const AddProductForm: FC<AddProductFormProps> = ({ onClose }) => {
               <Datepicker
                 asSingle
                 primaryColor="indigo"
-                containerClassName="w-auto group"
+                containerClassName="!w-auto group"
                 inputClassName={clsx(
                   'h-full cursor-pointer',
                   'placeholder:text-slate-500 placeholder:font-normal enabled:hover:placeholder:text-primary-blue',

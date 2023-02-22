@@ -24,6 +24,9 @@
       "@posad/react-core/components/icon-button": [
         "libs/react-core/src/components/icon-button/index.ts"
       ],
+      "@posad/react-core/components/simple-dialog": [
+        "libs/react-core/src/components/simple-dialog/index.ts"
+      ],
       "@posad/react-core/layouts/dashboard": [
         "libs/react-core/src/layouts/dashboard/index.ts"
       ],
