@@ -6,7 +6,8 @@ import {
   DocumentData,
   getFirestore,
 } from 'firebase/firestore';
-import { type User } from '@posad/react-core/types';
+import { type ExpiringProductSection, type User } from '../../types';
+import ExpiringProduct from '../../types/ExpiringProduct';
 
 export * from './context';
 
@@ -35,6 +36,10 @@ const createCollection = <T = DocumentData>(collectionName: string) => {
 
 export const collections = {
   users: createCollection<User>('users'),
+  expiringProductSections: createCollection<ExpiringProductSection>(
+    'expiring-product-sections'
+  ),
+  expiringProducts: createCollection<ExpiringProduct>('products'),
 };
 
 export default firebase;

@@ -1,10 +1,10 @@
 import { Icon } from '@tabler/icons-react';
 import clsx from 'clsx';
-import { forwardRef } from 'react';
+import { forwardRef, isValidElement, ReactElement } from 'react';
 import { Button, ButtonProps } from '../button';
 
 export type IconButtonProps = ButtonProps & {
-  icon: Icon;
+  icon: Icon | ReactElement;
   label: string;
   showLabel?: boolean;
 };
@@ -16,17 +16,21 @@ const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
     return (
       <Button
         {...props}
-        className={clsx('gap-3 !p-0', className)}
+        className={clsx('gap-3', props.variant == null && '!p-0', className)}
         aria-label={!showLabel ? label : undefined}
         ref={ref}
       >
-        <IconComponent
-          size={36}
-          className={clsx(
-            'transition duration-200 rounded-full p-2',
-            'group-hover:bg-primary-blue group-hover:text-white'
-          )}
-        />
+        {isValidElement(IconComponent) ? (
+          IconComponent
+        ) : (
+          <IconComponent
+            size={36}
+            className={clsx(
+              'transition duration-200 rounded-full p-2',
+              'group-hover:bg-primary-blue group-hover:text-white'
+            )}
+          />
+        )}
 
         {showLabel && (
           <span

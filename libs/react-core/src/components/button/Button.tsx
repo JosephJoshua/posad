@@ -3,7 +3,7 @@ import { ButtonHTMLAttributes, DetailedHTMLProps, forwardRef } from 'react';
 
 import { ReactComponent as DotsSpinner } from '../../../assets/spinners/dots.svg';
 
-export type ButtonVariants = 'filled' | 'outlined' | 'ghost';
+export type ButtonVariants = 'filled' | 'outlined' | 'ghost' | 'filled-ghost';
 
 type ButtonAttributes = DetailedHTMLProps<
   ButtonHTMLAttributes<HTMLButtonElement>,
@@ -45,12 +45,17 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       ),
       outlined: clsx('border border-slate-300', 'enabled:hover:bg-gray-100'),
       ghost: clsx('enabled:hover:text-white enabled:hover:bg-primary-blue'),
+      'filled-ghost': clsx(
+        'bg-gray-100 text-black',
+        'enabled:hover:bg-gray-200'
+      ),
     };
 
     const variantSpinnerStyles: Record<ButtonVariants, string> = {
       filled: clsx('text-white'),
       outlined: clsx('text-primary-blue'),
       ghost: clsx('text-white'),
+      'filled-ghost': clsx('text-primary-blue'),
     };
 
     return (
