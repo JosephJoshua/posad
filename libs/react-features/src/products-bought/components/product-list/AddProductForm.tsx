@@ -1,14 +1,16 @@
 import { Button } from '@posad/react-core/components/button';
 import { IconButton } from '@posad/react-core/components/icon-button';
 import { Input } from '@posad/react-core/components/input';
-import { IconCalendar, IconCamera } from '@tabler/icons-react';
+import { IconCamera } from '@tabler/icons-react';
 import { FC, KeyboardEvent, useEffect, useRef, useState } from 'react';
 import clsx from 'clsx';
-import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
+import Datepicker from 'react-tailwindcss-datepicker';
 import { addDoc, Timestamp } from 'firebase/firestore';
 import { collections, useAuthContext } from '@posad/react-core/libs/firebase';
+import * as yup from 'yup';
+import { DateValueType } from 'react-tailwindcss-datepicker/dist/types';
 
 export type AddProductFormProps = {
   onClose?: () => void;
@@ -16,10 +18,7 @@ export type AddProductFormProps = {
 
 const formSchema = yup.object({
   name: yup.string().required(),
-  /**
-   * TODO: change to required
-   */
-  expirationDate: yup.date(),
+  expirationDate: yup.date().required(),
 });
 
 type FormValues = yup.InferType<typeof formSchema>;
@@ -28,13 +27,16 @@ const AddProductForm: FC<AddProductFormProps> = ({ onClose }) => {
   const { firebaseUser } = useAuthContext();
 
   const containerRef = useRef<HTMLFormElement>(null);
+
   const [isLoading, setLoading] = useState<boolean>(false);
+  const [expirationDate, setExpirationDate] = useState<DateValueType>(null);
 
   const {
     register,
     handleSubmit,
     trigger,
     reset,
+    control,
     formState: { isValid },
   } = useForm<FormValues>({
     resolver: yupResolver(formSchema),
@@ -62,7 +64,7 @@ const AddProductForm: FC<AddProductFormProps> = ({ onClose }) => {
     return addDoc(collections.expiringProducts(firebaseUser.uid, 'default'), {
       name: values.name,
       imageUrl: 'test',
-      expirationDate: Timestamp.fromDate(new Date()),
+      expirationDate: Timestamp.fromDate(values.expirationDate),
     })
       .then(() => {
         reset();
@@ -90,21 +92,38 @@ const AddProductForm: FC<AddProductFormProps> = ({ onClose }) => {
           autoFocus
         />
 
-        <div className="flex gap-2">
+        <div className="flex gap-2 mt-2">
           <IconButton
-            className="!p-2 !gap-2 mt-2 text-sm"
-            variant="outlined"
-            icon={<IconCalendar size={20} />}
-            label="Expiration date"
-            showLabel
-          />
-
-          <IconButton
-            className="!p-2 !gap-2 mt-2 text-sm"
+            className="!pl-4 !pr-3 !py-2 !gap-12 text-sm"
             variant="outlined"
             icon={<IconCamera size={20} />}
             label="Product image"
             showLabel
+          />
+
+          <Controller
+            control={control}
+            name="expirationDate"
+            render={({ field: { onChange, value, name } }) => (
+              <Datepicker
+                asSingle
+                primaryColor="indigo"
+                containerClassName="w-auto group"
+                inputClassName={clsx(
+                  'h-full cursor-pointer',
+                  'placeholder:text-slate-500 placeholder:font-normal enabled:hover:placeholder:text-primary-blue',
+                  'group-hover:bg-gray-100'
+                )}
+                toggleClassName={'text-primary-blue'}
+                placeholder="Expiration date"
+                value={{
+                  startDate: value,
+                  endDate: value,
+                }}
+                onChange={(val) => onChange(val?.startDate)}
+                inputName={name}
+              />
+            )}
           />
         </div>
       </div>

@@ -74,6 +74,7 @@
     "react-dom": "18.2.0",
     "react-hook-form": "^7.43.1",
     "react-router-dom": "^6.8.1",
+    "react-tailwindcss-datepicker": "^1.4.2",
     "tailwind-scrollbar": "^2.1.0",
     "tslib": "^2.3.0",
     "vite-plugin-svgr": "^2.4.0",

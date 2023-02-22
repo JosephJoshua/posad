@@ -20,18 +20,6 @@ const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
         aria-label={!showLabel ? label : undefined}
         ref={ref}
       >
-        {isValidElement(IconComponent) ? (
-          IconComponent
-        ) : (
-          <IconComponent
-            size={36}
-            className={clsx(
-              'transition duration-200 rounded-full p-2',
-              'group-hover:bg-primary-blue group-hover:text-white'
-            )}
-          />
-        )}
-
         {showLabel && (
           <span
             className={clsx(
@@ -42,6 +30,18 @@ const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
           >
             {label}
           </span>
+        )}
+
+        {isValidElement(IconComponent) ? (
+          IconComponent
+        ) : (
+          <IconComponent
+            size={36}
+            className={clsx(
+              'transition duration-200 rounded-full p-2',
+              'group-hover:bg-primary-blue group-hover:text-white'
+            )}
+          />
         )}
       </Button>
     );
