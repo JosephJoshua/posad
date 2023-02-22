@@ -9,7 +9,7 @@ import {
 import { clsx } from 'clsx';
 import { NavLink } from 'react-router-dom';
 import { signOut } from 'firebase/auth';
-import { auth } from '@posad/react-core/libs/firebase';
+import { auth } from 'libs/business-logic/src/libs/firebase';
 import { Button } from '@posad/react-core/components/button';
 
 export type AppDrawerProps = {

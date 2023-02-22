@@ -1,13 +1,18 @@
 import { IconButton } from '@posad/react-core/components/icon-button';
 import { IconMoodSad, IconPlus } from '@tabler/icons-react';
-import { ExpiringProduct } from '@posad/react-core/types';
 import { FC, useEffect, useState } from 'react';
 import AddProductForm from './AddProductForm';
 import ProductItem from './ProductItem';
 import { deleteDoc, doc, onSnapshot } from 'firebase/firestore';
-import { collections, useAuthContext } from '@posad/react-core/libs/firebase';
+import { collections } from 'libs/business-logic/src/libs/firebase';
 import { SimpleDialog } from 'libs/react-core/src/components/simple-dialog';
 import { Button } from '@posad/react-core/components/button';
+import { useAuthContext } from '@posad/react-core/libs/firebase';
+import { ExpiringProduct } from 'libs/business-logic/src/types';
+import {
+  deleteProduct,
+  listenToProductsInSection,
+} from 'libs/business-logic/src/features/products-bought';
 
 const ProductList: FC = () => {
   const { firebaseUser } = useAuthContext();
@@ -22,11 +27,10 @@ const ProductList: FC = () => {
   useEffect(() => {
     if (firebaseUser == null) return;
 
-    const unsubscribe = onSnapshot(
-      collections.expiringProducts(firebaseUser.uid, 'default'),
-      (snap) => {
-        setProducts(snap.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
-      }
+    const unsubscribe = listenToProductsInSection(
+      firebaseUser.uid,
+      'default',
+      setProducts
     );
 
     return () => unsubscribe();
@@ -39,15 +43,10 @@ const ProductList: FC = () => {
 
     setDeleting(true);
 
-    await deleteDoc(
-      doc(
-        collections.expiringProducts(
-          firebaseUser.uid,
-          productToDelete.sectionId
-        ),
-        productToDelete.id
-      )
-    ).finally(() => setDeleting(false));
+    await deleteProduct(firebaseUser.uid, {
+      sectionId: productToDelete.sectionId,
+      productId: productToDelete.id,
+    }).finally(() => setDeleting(false));
 
     closeDeleteConfirmation();
   };

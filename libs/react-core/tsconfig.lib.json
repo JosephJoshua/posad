@@ -18,5 +18,17 @@
     "**/*.spec.jsx",
     "**/*.test.jsx"
   ],
-  "include": ["**/*.js", "**/*.jsx", "**/*.ts", "**/*.tsx"]
+  "include": [
+    "**/*.js",
+    "**/*.jsx",
+    "**/*.ts",
+    "**/*.tsx",
+    "../business-logic/src/libs/firebase/index.ts",
+    "../business-logic/src/libs/firebase/index.ts",
+    "../business-logic/src/types/ExpiringProduct.ts",
+    "../business-logic/src/types/ExpiringProduct.ts",
+    "../business-logic/src/types/ExpiringProductSection.ts",
+    "../business-logic/src/types/User.ts",
+    "../business-logic/src/types/index.ts"
+  ]
 }

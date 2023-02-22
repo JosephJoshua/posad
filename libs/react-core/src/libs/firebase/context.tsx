@@ -6,9 +6,12 @@ import {
   useEffect,
   useState,
 } from 'react';
-import { type User } from '../../types';
+import { type User } from '../../../../business-logic/src/types';
 import { FC } from 'react';
-import { auth, collections } from '.';
+import {
+  auth,
+  collections,
+} from '../../../../business-logic/src/libs/firebase';
 import { doc, onSnapshot } from 'firebase/firestore';
 
 export type AuthContextProps = {
@@ -54,7 +57,9 @@ export const AuthContextProvider: FC<AuthContextProviderProps> = ({
     const unsubscribe = onSnapshot(
       doc(collections.users, firebaseUser.uid),
       (snapshot) => {
-        setUserData(snapshot.data() ?? null);
+        const data = snapshot.data();
+
+        if (data != null) setUserData({ ...data, id: snapshot.id });
         setLoading(false);
       }
     );

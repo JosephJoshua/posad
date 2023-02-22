@@ -15,18 +15,20 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@posad/react-core/components/input": [
-        "libs/react-core/src/components/input/index.ts"
-      ],
+      "@posad/business-logic": ["libs/business-logic/src/index.ts"],
       "@posad/react-core/components/button": [
         "libs/react-core/src/components/button/index.ts"
       ],
       "@posad/react-core/components/icon-button": [
         "libs/react-core/src/components/icon-button/index.ts"
       ],
+      "@posad/react-core/components/input": [
+        "libs/react-core/src/components/input/index.ts"
+      ],
       "@posad/react-core/components/simple-dialog": [
         "libs/react-core/src/components/simple-dialog/index.ts"
       ],
+      "@posad/react-core/hooks": ["libs/react-core/src/hooks/index.ts"],
       "@posad/react-core/layouts/dashboard": [
         "libs/react-core/src/layouts/dashboard/index.ts"
       ],
@@ -36,10 +38,16 @@
       "@posad/react-core/libs/firebase": [
         "libs/react-core/src/libs/firebase/index.ts"
       ],
-      "@posad/react-core/types": ["libs/react-core/src/types/index.ts"],
-      "@posad/react-core/hooks": ["libs/react-core/src/hooks/index.ts"],
-
-      "@posad/react-features/auth": ["libs/react-features/src/auth/index.ts"],
+      "@posad/business-logic/libs/firebase": [
+        "libs/business-logic/src/libs/firebase/index.ts"
+      ],
+      "@posad/business-logic/features/auth": [
+        "libs/business-logic/src/features/auth/index.ts"
+      ],
+      "@posad/business-logic/features/products-bought": [
+        "libs/business-logic/src/featdures/products-bought/index.ts"
+      ],
+      "@posad/business-logic/types": ["libs/react-core/src/types/index.ts"],
       "@posad/react-features/home": ["libs/react-features/src/home/index.ts"],
       "@posad/react-features/products-bought": [
         "libs/react-features/src/products-bought/index.ts"

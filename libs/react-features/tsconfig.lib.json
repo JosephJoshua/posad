@@ -18,5 +18,12 @@
     "**/*.spec.jsx",
     "**/*.test.jsx"
   ],
-  "include": ["**/*.js", "**/*.jsx", "**/*.ts", "**/*.tsx"]
+  "include": [
+    "**/*.js",
+    "**/*.jsx",
+    "**/*.ts",
+    "**/*.tsx",
+    "../business-logic/src/features/products-bought/error.ts",
+    "../business-logic/src/features/products-bought/error.ts"
+  ]
 }

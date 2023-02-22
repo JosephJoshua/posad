@@ -7,20 +7,17 @@ import clsx from 'clsx';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Controller, useForm } from 'react-hook-form';
 import Datepicker from 'react-tailwindcss-datepicker';
-import { addDoc, Timestamp } from 'firebase/firestore';
-import { collections, useAuthContext } from '@posad/react-core/libs/firebase';
-import * as yup from 'yup';
+import { Timestamp } from 'firebase/firestore';
+import { useAuthContext } from '@posad/react-core/libs/firebase';
+import {
+  addProduct,
+  addProductFormSchema,
+  AddProductFormValues,
+} from 'libs/business-logic/src/features/products-bought';
 
 export type AddProductFormProps = {
   onClose?: () => void;
 };
-
-const formSchema = yup.object({
-  name: yup.string().required(),
-  expirationDate: yup.date().required(),
-});
-
-type FormValues = yup.InferType<typeof formSchema>;
 
 const AddProductForm: FC<AddProductFormProps> = ({ onClose }) => {
   const { firebaseUser } = useAuthContext();
@@ -35,8 +32,8 @@ const AddProductForm: FC<AddProductFormProps> = ({ onClose }) => {
     reset,
     control,
     formState: { isValid },
-  } = useForm<FormValues>({
-    resolver: yupResolver(formSchema),
+  } = useForm<AddProductFormValues>({
+    resolver: yupResolver(addProductFormSchema),
     mode: 'onChange',
   });
 
@@ -53,7 +50,7 @@ const AddProductForm: FC<AddProductFormProps> = ({ onClose }) => {
     }
   };
 
-  const handleFormSubmit = async (values: FormValues) => {
+  const handleFormSubmit = async (values: AddProductFormValues) => {
     if (firebaseUser == null) return;
 
     setLoading(true);
@@ -63,7 +60,7 @@ const AddProductForm: FC<AddProductFormProps> = ({ onClose }) => {
      */
     const sectionId = 'default';
 
-    return addDoc(collections.expiringProducts(firebaseUser.uid, sectionId), {
+    return addProduct(firebaseUser.uid, {
       sectionId,
       name: values.name,
       imageUrl: 'test',

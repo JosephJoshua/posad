@@ -3,22 +3,16 @@ import { useBodyClass, useTitle } from '@posad/react-core/hooks';
 import { Input } from '@posad/react-core/components/input';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import {
-  authenticateWithGoogle,
-  loginWithCredentials,
-} from '@posad/react-features/auth';
 import { Link } from 'react-router-dom';
 import { Button } from '@posad/react-core/components/button';
-import * as yup from 'yup';
+import {
+  loginWithCredentials,
+  authenticateWithGoogle,
+  LoginFormValues,
+  loginFormSchema,
+} from 'libs/business-logic/src/features/auth';
 
 import googleIcon from '../assets/icons/google.svg';
-
-const loginFormSchema = yup.object({
-  email: yup.string().email().required(),
-  password: yup.string().required(),
-});
-
-type LoginFormValues = yup.InferType<typeof loginFormSchema>;
 
 const LoginPage: FC = () => {
   const {
