@@ -45,6 +45,7 @@ importers:
       clsx: ^1.2.1
       cypress: ^12.2.0
       d3-array: ^3.2.2
+      dayjs: ^1.11.7
       eslint: ~8.15.0
       eslint-config-prettier: 8.1.0
       eslint-plugin-cypress: ^2.10.3
@@ -90,6 +91,7 @@ importers:
       '@visx/tooltip': 3.0.0_biqbaboplfbrettd7655fr4n2y
       clsx: 1.2.1
       d3-array: 3.2.2
+      dayjs: 1.11.7
       firebase: 9.17.1
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
@@ -105,7 +107,7 @@ importers:
       '@nrwl/cypress': 15.7.1_n7mznwqtql7wwbqoyclua2lr6a
       '@nrwl/eslint-plugin-nx': 15.7.1_m3mqoaoafklozr7ofhazpuzr44
       '@nrwl/linter': 15.7.1_iqgqupxdglb7pgajvbq75etfrq
-      '@nrwl/nx-cloud': 15.0.3
+      '@nrwl/nx-cloud': 15.1.0
       '@nrwl/react': 15.7.1_jz3rhvcik35zhjtadj3cwpmshe
       '@nrwl/vite': 15.7.1_dgbkiriybbyllxhwlwbv7ximqa
       '@nrwl/workspace': 15.7.1_3joxs7tzhkrjjacnd53qs32tau
@@ -2504,8 +2506,8 @@ packages:
       - typescript
     dev: true
 
-  /@nrwl/nx-cloud/15.0.3:
-    resolution: {integrity: sha512-KvwM8/IbCOlbWIzi+Tm14tJkEdQK3ruN6TPUmeKnkeFZsJyoFw4GCyKJMOLs8y4MQokHgskg3nbF822JLR9xJg==}
+  /@nrwl/nx-cloud/15.1.0:
+    resolution: {integrity: sha512-QcMlPZ+DBzTWcoWSziyrENYhBLfE5MSns3M5qJB8EClg9/vomepA+NLOLWB+/O0sfdeBGFKlvFyrjf+CnVaB2A==}
     hasBin: true
     dependencies:
       axios: 0.21.4
@@ -4403,7 +4405,6 @@ packages:
 
   /dayjs/1.11.7:
     resolution: {integrity: sha512-+Yw9U6YO5TQohxLcIkrXBeY73WP3ejHWVvx8XCk3gxvQDCTEmS48ZrSZCKciI7Bhl/uCMyxYtE9UqRILmFphkQ==}
-    dev: true
 
   /debounce/1.2.1:
     resolution: {integrity: sha512-XRRe6Glud4rd/ZGQfiV1ruXSfbvfJedlV9Y6zOlP+2K04vBYiJEte6stfFkCP03aMnY5tsipamumUjL14fofug==}

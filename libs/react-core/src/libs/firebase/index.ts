@@ -30,16 +30,33 @@ export const db = getFirestore(firebase);
 /**
  * @see https://plainenglish.io/blog/using-firestore-with-typescript-in-the-v9-sdk-cf36851bb099
  */
-const createCollection = <T = DocumentData>(collectionName: string) => {
-  return collection(db, collectionName) as CollectionReference<T>;
+const createCollection = <T = DocumentData>(
+  path: string,
+  ...pathSegments: string[]
+) => {
+  return collection(db, path, ...pathSegments) as CollectionReference<T>;
 };
 
+const USERS = 'users';
+const EXPIRING_PRODUCT_SECTIONS = 'expiring-product-sections';
+const EXPIRING_PRODUCTS = 'products';
+
 export const collections = {
-  users: createCollection<User>('users'),
-  expiringProductSections: createCollection<ExpiringProductSection>(
-    'expiring-product-sections'
-  ),
-  expiringProducts: createCollection<ExpiringProduct>('products'),
+  users: createCollection<Omit<User, 'id'>>(USERS),
+  expiringProductSections: (userId: string) =>
+    createCollection<Omit<ExpiringProductSection, 'id'>>(
+      USERS,
+      userId,
+      EXPIRING_PRODUCT_SECTIONS
+    ),
+  expiringProducts: (userId: string, sectionId: string) =>
+    createCollection<Omit<ExpiringProduct, 'id'>>(
+      USERS,
+      userId,
+      EXPIRING_PRODUCT_SECTIONS,
+      sectionId,
+      EXPIRING_PRODUCTS
+    ),
 };
 
 export default firebase;

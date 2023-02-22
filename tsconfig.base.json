@@ -27,6 +27,9 @@
       "@posad/react-core/layouts/dashboard": [
         "libs/react-core/src/layouts/dashboard/index.ts"
       ],
+      "@posad/react-core/libs/dayjs": [
+        "libs/react-core/src/libs/dayjs/index.ts"
+      ],
       "@posad/react-core/libs/firebase": [
         "libs/react-core/src/libs/firebase/index.ts"
       ],

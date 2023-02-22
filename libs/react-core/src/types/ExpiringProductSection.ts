@@ -1,4 +1,5 @@
 type ExpiringProductSection = {
+  id: string;
   name: string;
 };
 

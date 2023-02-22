@@ -1,4 +1,4 @@
-import { Auth, onAuthStateChanged, User as FirebaseUser } from 'firebase/auth';
+import { onAuthStateChanged, User as FirebaseUser } from 'firebase/auth';
 import {
   createContext,
   PropsWithChildren,
@@ -6,7 +6,7 @@ import {
   useEffect,
   useState,
 } from 'react';
-import { User } from '@posad/react-core/types';
+import { type User } from '../../types';
 import { FC } from 'react';
 import { auth, collections } from '.';
 import { doc, onSnapshot } from 'firebase/firestore';

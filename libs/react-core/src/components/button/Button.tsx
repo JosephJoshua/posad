@@ -4,6 +4,7 @@ import { ButtonHTMLAttributes, DetailedHTMLProps, forwardRef } from 'react';
 import { ReactComponent as DotsSpinner } from '../../../assets/spinners/dots.svg';
 
 export type ButtonVariants = 'filled' | 'outlined' | 'ghost' | 'filled-ghost';
+export type ButtonSizes = 'base' | 'sm';
 
 type ButtonAttributes = DetailedHTMLProps<
   ButtonHTMLAttributes<HTMLButtonElement>,
@@ -14,6 +15,7 @@ export type ButtonProps = Omit<ButtonAttributes, 'value'> & {
   spinnerClassName?: string;
   isLoading?: boolean;
   variant?: ButtonVariants;
+  size?: ButtonSizes;
 };
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
@@ -26,6 +28,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       spinnerClassName,
       type,
       disabled,
+      size = 'base',
       ...props
     },
     ref
@@ -58,6 +61,11 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       'filled-ghost': clsx('text-primary-blue'),
     };
 
+    const sizeStyles: Record<ButtonSizes, string> = {
+      base: clsx('text-base'),
+      sm: clsx('text-sm'),
+    };
+
     return (
       <button
         {...props}
@@ -66,6 +74,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         disabled={disabled || isLoading}
         className={clsx(
           baseStyles,
+          sizeStyles[size],
           variant && variantStyles[variant],
           className
         )}
@@ -74,6 +83,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           <DotsSpinner
             className={clsx(
               variant && variantSpinnerStyles[variant],
+              sizeStyles[size],
               spinnerClassName
             )}
           />
