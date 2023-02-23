@@ -79,9 +79,10 @@ const ProductImageDialog: FC<ProductImageProps> = ({
     setLoading(true);
 
     uploadProductImage(firebaseUser.uid, selectedFile)
-      .then((path) =>
+      .then(({ path, url }) =>
         onChange({
           path,
+          url,
           originalFileName: selectedFile.name,
           source: 'user',
         })

@@ -105,7 +105,17 @@ const AddProductForm: FC<AddProductFormProps> = ({ onClose }) => {
                 <IconButton
                   className="!pl-4 !pr-3 !py-1.5 !gap-12 text-ellipsis text-sm"
                   variant="outlined"
-                  icon={<IconCamera size={20} />}
+                  icon={
+                    value?.url == null ? (
+                      <IconCamera size={20} />
+                    ) : (
+                      <img
+                        className="w-[20px] h-[20px] rounded-full object-cover"
+                        src={value.url}
+                        alt=""
+                      />
+                    )
+                  }
                   iconPosition="right"
                   label={
                     value?.originalFileName == null

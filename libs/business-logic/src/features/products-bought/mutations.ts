@@ -1,5 +1,5 @@
 import { addDoc, deleteDoc, doc } from 'firebase/firestore';
-import { uploadBytesResumable } from 'firebase/storage';
+import { getDownloadURL, uploadBytesResumable } from 'firebase/storage';
 import { collections, storageRefs } from '../../libs/firebase';
 import { ExpiringProduct } from '../../types';
 import { handleStorageError } from '../../libs/firebase';
@@ -8,6 +8,11 @@ export type AddProductPayload = Omit<ExpiringProduct, 'id' | 'consumedAt'>;
 export type DeleteProductPayload = {
   sectionId: string;
   productId: string;
+};
+
+export type UploadProductImageResult = {
+  path: string;
+  url: string;
 };
 
 export const addProduct = async (uid: string, payload: AddProductPayload) => {
@@ -25,8 +30,9 @@ export const deleteProduct = async (
 
 export const uploadProductImage = async (
   uid: string,
-  file: File
-): Promise<string> => {
+  file: File,
+  onProgress: (progress: number) => void = () => null
+): Promise<UploadProductImageResult> => {
   const imageId = Date.now().toString();
   const extension = file.name.split('.').pop();
 
@@ -45,10 +51,16 @@ export const uploadProductImage = async (
     'state_changed',
     (snap) => {
       const progress = snap.bytesTransferred / snap.totalBytes;
-      console.log(progress * 100);
+      onProgress(progress);
     },
     (error) => handleStorageError(error)
   );
 
-  return (await task).ref.fullPath;
+  const ref = (await task).ref;
+  const url = await getDownloadURL(ref);
+
+  return {
+    path: ref.fullPath,
+    url,
+  };
 };

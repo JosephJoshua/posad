@@ -9,6 +9,7 @@ export const addProductFormSchema = yup.object({
       originalFileName: yup.string(),
       path: yup.string().required(),
       source: yup.string().oneOf(ExpiringProductImageSources).required(),
+      url: yup.string().url().required(),
     })
     .required(),
 });
