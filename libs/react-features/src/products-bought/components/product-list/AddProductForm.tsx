@@ -15,6 +15,7 @@ import {
   AddProductFormValues,
 } from '@posad/business-logic/features/products-bought';
 import ProductImageDialog from './ProductImageDialog';
+import dayjs from 'dayjs';
 
 export type AddProductFormProps = {
   onClose?: () => void;
@@ -27,6 +28,10 @@ const AddProductForm: FC<AddProductFormProps> = ({ onClose }) => {
 
   const [isLoading, setLoading] = useState<boolean>(false);
   const [imageDialogOpen, setImageDialogOpen] = useState<boolean>(false);
+
+  const [yesterday] = useState<Date>(() =>
+    dayjs().subtract(1, 'day').millisecond(0).toDate()
+  );
 
   const {
     register,
@@ -156,6 +161,7 @@ const AddProductForm: FC<AddProductFormProps> = ({ onClose }) => {
                   startDate: value,
                   endDate: value,
                 }}
+                minDate={yesterday}
                 onChange={(val) => onChange(val?.startDate)}
                 inputName={name}
               />
