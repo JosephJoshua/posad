@@ -6,13 +6,10 @@ import {
   useEffect,
   useState,
 } from 'react';
-import { type User } from '../../../../business-logic/src/types';
 import { FC } from 'react';
-import {
-  auth,
-  collections,
-} from '../../../../business-logic/src/libs/firebase';
 import { doc, onSnapshot } from 'firebase/firestore';
+import { User } from '@posad/business-logic/types';
+import { auth, collections } from '@posad/business-logic/libs/firebase';
 
 export type AuthContextProps = {
   firebaseUser: FirebaseUser | null;

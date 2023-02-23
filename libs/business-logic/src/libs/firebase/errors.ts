@@ -1,5 +1,26 @@
 import { FirebaseError } from 'firebase/app';
 import { AuthErrorCodes } from 'firebase/auth';
+import { StorageError, StorageErrorCode } from 'firebase/storage';
+
+export const handleStorageError = (error: StorageError) => {
+  switch (error.code) {
+    case StorageErrorCode.UNAUTHENTICATED:
+    case StorageErrorCode.UNAUTHORIZED:
+      throw new Error("You're not authorized to upload this file!");
+
+    case StorageErrorCode.OBJECT_NOT_FOUND:
+      throw new Error('File could not be found.');
+
+    case StorageErrorCode.UNKNOWN:
+      throw new Error('An unknown error occured while uploading the file!');
+
+    case StorageErrorCode.CANCELED:
+      return;
+
+    default:
+      throw error;
+  }
+};
 
 export const handleAuthError = (err: unknown) => {
   if (err instanceof FirebaseError) {

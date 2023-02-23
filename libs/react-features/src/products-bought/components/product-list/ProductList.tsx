@@ -3,16 +3,14 @@ import { IconMoodSad, IconPlus } from '@tabler/icons-react';
 import { FC, useEffect, useState } from 'react';
 import AddProductForm from './AddProductForm';
 import ProductItem from './ProductItem';
-import { deleteDoc, doc, onSnapshot } from 'firebase/firestore';
-import { collections } from 'libs/business-logic/src/libs/firebase';
-import { SimpleDialog } from 'libs/react-core/src/components/simple-dialog';
+import { SimpleDialog } from '@posad/react-core/components/simple-dialog';
 import { Button } from '@posad/react-core/components/button';
 import { useAuthContext } from '@posad/react-core/libs/firebase';
-import { ExpiringProduct } from 'libs/business-logic/src/types';
+import { ExpiringProduct } from '@posad/business-logic/types';
 import {
   deleteProduct,
   listenToProductsInSection,
-} from 'libs/business-logic/src/features/products-bought';
+} from '@posad/business-logic/features/products-bought';
 
 const ProductList: FC = () => {
   const { firebaseUser } = useAuthContext();
@@ -94,7 +92,6 @@ const ProductList: FC = () => {
         isOpen={productToDelete != null}
         onClose={closeDeleteConfirmation}
         title="Delete product"
-        message="Are you sure you want to delete this product?"
         actions={
           <div className="flex justify-end gap-2 mt-4">
             <Button
@@ -115,7 +112,9 @@ const ProductList: FC = () => {
             </Button>
           </div>
         }
-      />
+      >
+        Are you sure you want to delete this product?
+      </SimpleDialog>
     </>
   );
 };

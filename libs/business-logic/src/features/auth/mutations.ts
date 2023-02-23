@@ -6,7 +6,7 @@ import {
 } from 'firebase/auth';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { auth, collections, googleProvider } from '../../libs/firebase';
-import { handleAuthError } from './errors';
+import { handleAuthError } from '../../libs/firebase';
 
 export type LoginCredentials = {
   email: string;
@@ -21,14 +21,14 @@ export type RegisterCredentials = {
 
 export const loginWithCredentials = async (
   credentials: LoginCredentials
-): Promise<UserCredential | null> => {
+): Promise<UserCredential> => {
   return signInWithEmailAndPassword(
     auth,
     credentials.email,
     credentials.password
   ).catch((error) => {
     handleAuthError(error);
-    return null;
+    throw error;
   });
 };
 

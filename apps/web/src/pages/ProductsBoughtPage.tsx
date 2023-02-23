@@ -8,7 +8,7 @@ const ProductsBoughtPage: FC = () => {
 
   return (
     <DashboardLayout className="flex flex-col">
-      <div className="bg-white p-5 rounded-2xl flex flex-col">
+      <div className="bg-white p-5 rounded-2xl flex flex-col flex-1">
         <h2 className="text-2xl font-medium">Products Bought</h2>
         <ProductList />
       </div>

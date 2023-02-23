@@ -10,7 +10,7 @@ import {
   authenticateWithGoogle,
   LoginFormValues,
   loginFormSchema,
-} from 'libs/business-logic/src/features/auth';
+} from '@posad/business-logic/features/auth';
 
 import googleIcon from '../assets/icons/google.svg';
 

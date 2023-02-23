@@ -5,16 +5,16 @@ export type SimpleDialogProps = {
   isOpen?: boolean;
   onClose?: () => void;
   title: string;
-  message: string;
-  actions: ReactNode;
+  actions?: ReactNode;
+  children: ReactNode;
 };
 
 const SimpleDialog: FC<SimpleDialogProps> = ({
   isOpen,
   onClose,
   title,
-  message,
   actions,
+  children,
 }) => {
   return (
     <Transition appear show={isOpen ?? false} as={Fragment}>
@@ -50,8 +50,8 @@ const SimpleDialog: FC<SimpleDialogProps> = ({
                   {title}
                 </Dialog.Title>
 
-                <div className="mt-2">
-                  <p className="text-gray-500">{message}</p>
+                <div className="mt-2 text-gray-500 max-w-full break-words">
+                  {children}
                 </div>
 
                 {actions}

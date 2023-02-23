@@ -5,12 +5,16 @@ import { Button, ButtonProps } from '../button';
 
 export type IconButtonProps = ButtonProps & {
   icon: Icon | ReactElement;
+  iconPosition?: 'left' | 'right';
   label: string;
   showLabel?: boolean;
 };
 
 const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
-  ({ icon, label, showLabel, className, ...props }, ref) => {
+  (
+    { icon, label, showLabel, className, iconPosition = 'left', ...props },
+    ref
+  ) => {
     const IconComponent = icon;
 
     return (
@@ -25,24 +29,27 @@ const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
             className={clsx(
               'text-slate-500',
               'transition duration-200',
-              'group-hover:text-primary-blue'
+              'group-hover:text-primary-blue',
+              iconPosition === 'left' ? 'order-2' : 'order-1'
             )}
           >
             {label}
           </span>
         )}
 
-        {isValidElement(IconComponent) ? (
-          IconComponent
-        ) : (
-          <IconComponent
-            size={36}
-            className={clsx(
-              'transition duration-200 rounded-full p-2',
-              'group-hover:bg-primary-blue group-hover:text-white'
-            )}
-          />
-        )}
+        <div className={iconPosition === 'left' ? 'order-1' : 'order-2'}>
+          {isValidElement(IconComponent) ? (
+            IconComponent
+          ) : (
+            <IconComponent
+              size={36}
+              className={clsx(
+                'transition duration-200 rounded-full p-2',
+                'group-hover:bg-primary-blue group-hover:text-white'
+              )}
+            />
+          )}
+        </div>
       </Button>
     );
   }

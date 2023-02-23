@@ -66,6 +66,11 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       sm: clsx('text-sm'),
     };
 
+    const sizeSpinnerStyles: Record<ButtonSizes, string> = {
+      base: clsx('h-[24px]'),
+      sm: clsx('h-[20px]'),
+    };
+
     return (
       <button
         {...props}
@@ -83,7 +88,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           <DotsSpinner
             className={clsx(
               variant && variantSpinnerStyles[variant],
-              sizeStyles[size],
+              sizeSpinnerStyles[size],
               spinnerClassName
             )}
           />

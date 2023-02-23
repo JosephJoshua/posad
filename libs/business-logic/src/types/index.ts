@@ -1,3 +1,5 @@
-export { default as User } from './User';
-export { default as ExpiringProductSection } from './ExpiringProductSection';
-export { default as ExpiringProduct } from './ExpiringProduct';
+export * from './ExpiringProduct';
+
+export { type default as User } from './User';
+export { type default as ExpiringProduct } from './ExpiringProduct';
+export { type default as ExpiringProductSection } from './ExpiringProductSection';

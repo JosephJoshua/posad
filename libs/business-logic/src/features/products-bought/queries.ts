@@ -1,6 +1,8 @@
 import { onSnapshot } from 'firebase/firestore';
-import { collections } from '../../libs/firebase';
+import { getDownloadURL, ref, StorageError } from 'firebase/storage';
+import { collections, storage } from '../../libs/firebase';
 import { ExpiringProduct } from '../../types';
+import { handleStorageError } from '../../libs/firebase';
 
 export const listenToProductsInSection = (
   uid: string,
@@ -15,4 +17,13 @@ export const listenToProductsInSection = (
       }))
     );
   });
+};
+
+export const getProductImageUrl = async (path: string): Promise<string> => {
+  try {
+    return await getDownloadURL(ref(storage, path));
+  } catch (error) {
+    if (error instanceof StorageError) handleStorageError(error);
+    throw error;
+  }
 };

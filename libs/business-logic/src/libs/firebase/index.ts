@@ -6,8 +6,8 @@ import {
   DocumentData,
   getFirestore,
 } from 'firebase/firestore';
-import { type ExpiringProductSection, type User } from '../../types';
-import ExpiringProduct from '../../types/ExpiringProduct';
+import { getStorage, ref } from 'firebase/storage';
+import { ExpiringProduct, ExpiringProductSection, User } from '../../types';
 
 const config = {
   apiKey: 'AIzaSyD9gRTS4ogqkDA98AwCKpt4x6wp-OHXz_A',
@@ -20,9 +20,15 @@ const config = {
 
 const firebase = initializeApp(config);
 
+/**
+ * -- Auth
+ */
 export const auth = getAuth(firebase);
 export const googleProvider = new GoogleAuthProvider();
 
+/**
+ * -- Firestore
+ */
 export const db = getFirestore(firebase);
 
 /**
@@ -57,4 +63,14 @@ export const collections = {
     ),
 };
 
+/**
+ * -- Cloud Storage
+ */
+export const storage = getStorage(firebase);
+export const storageRefs = {
+  expiringProductImages: (uid: string, imageId: string) =>
+    ref(storage, `users/${uid}/expiring-product-images/${imageId}`),
+};
+
+export * from './errors';
 export default firebase;

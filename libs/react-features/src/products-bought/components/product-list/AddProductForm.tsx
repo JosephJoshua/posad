@@ -13,7 +13,8 @@ import {
   addProduct,
   addProductFormSchema,
   AddProductFormValues,
-} from 'libs/business-logic/src/features/products-bought';
+} from '@posad/business-logic/features/products-bought';
+import ProductImageDialog from './ProductImageDialog';
 
 export type AddProductFormProps = {
   onClose?: () => void;
@@ -23,7 +24,9 @@ const AddProductForm: FC<AddProductFormProps> = ({ onClose }) => {
   const { firebaseUser } = useAuthContext();
 
   const containerRef = useRef<HTMLFormElement>(null);
+
   const [isLoading, setLoading] = useState<boolean>(false);
+  const [imageDialogOpen, setImageDialogOpen] = useState<boolean>(false);
 
   const {
     register,
@@ -63,7 +66,8 @@ const AddProductForm: FC<AddProductFormProps> = ({ onClose }) => {
     return addProduct(firebaseUser.uid, {
       sectionId,
       name: values.name,
-      imageUrl: 'test',
+      imageUrl: values.image.path,
+      imageSource: values.image.source,
       expirationDate: Timestamp.fromDate(values.expirationDate),
     })
       .then(() => {
@@ -84,7 +88,7 @@ const AddProductForm: FC<AddProductFormProps> = ({ onClose }) => {
       onKeyUp={handleKeyDown}
       onSubmit={handleSubmit(handleFormSubmit)}
     >
-      <div className="px-2">
+      <div className="px-3">
         <Input
           {...register('name')}
           placeholder="Product name"
@@ -92,13 +96,35 @@ const AddProductForm: FC<AddProductFormProps> = ({ onClose }) => {
           autoFocus
         />
 
-        <div className="flex gap-2 mt-2">
-          <IconButton
-            className="!pl-4 !pr-3 !py-2 !gap-12 text-sm"
-            variant="outlined"
-            icon={<IconCamera size={20} />}
-            label="Product image"
-            showLabel
+        <div className="flex gap-2 mt-2 max-w-full">
+          <Controller
+            control={control}
+            name="image"
+            render={({ field: { onChange, value, name } }) => (
+              <>
+                <IconButton
+                  className="!pl-4 !pr-3 !py-1.5 !gap-12 text-ellipsis text-sm"
+                  variant="outlined"
+                  icon={<IconCamera size={20} />}
+                  iconPosition="right"
+                  label={
+                    value?.originalFileName == null
+                      ? 'Product image'
+                      : value.originalFileName
+                  }
+                  onClick={() => setImageDialogOpen(true)}
+                  showLabel
+                />
+
+                <ProductImageDialog
+                  isOpen={imageDialogOpen}
+                  onClose={() => setImageDialogOpen(false)}
+                  value={value}
+                  onChange={onChange}
+                  inputName={name}
+                />
+              </>
+            )}
           />
 
           <Controller
@@ -110,7 +136,7 @@ const AddProductForm: FC<AddProductFormProps> = ({ onClose }) => {
                 primaryColor="indigo"
                 containerClassName="!w-auto group"
                 inputClassName={clsx(
-                  'h-full cursor-pointer',
+                  'h-full cursor-pointer !py-1.5',
                   'placeholder:text-slate-500 placeholder:font-normal enabled:hover:placeholder:text-primary-blue',
                   'group-hover:bg-gray-100'
                 )}
