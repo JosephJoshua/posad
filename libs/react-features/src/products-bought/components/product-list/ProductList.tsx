@@ -1,7 +1,7 @@
 import { IconButton } from '@posad/react-core/components/icon-button';
 import { IconMoodSad, IconPlus } from '@tabler/icons-react';
 import { FC, useEffect, useState } from 'react';
-import AddProductForm from './AddProductForm';
+import ProductEntryForm from './ProductEntryForm';
 import ProductItem from './ProductItem';
 import { SimpleDialog } from '@posad/react-core/components/simple-dialog';
 import { Button } from '@posad/react-core/components/button';
@@ -17,6 +17,8 @@ const ProductList: FC = () => {
 
   const [showAddForm, setShowAddForm] = useState<boolean>(false);
   const [isDeleting, setDeleting] = useState<boolean>(false);
+
+  const [productToEdit, setProductToEdit] = useState<string | null>(null);
   const [productToDelete, setProductToDelete] =
     useState<ExpiringProduct | null>(null);
 
@@ -66,7 +68,10 @@ const ProductList: FC = () => {
             <ProductItem
               key={product.id}
               product={product}
+              onEdit={() => setProductToEdit(product.id)}
               onDelete={() => setProductToDelete(product)}
+              onEditStop={() => setProductToEdit(null)}
+              isEditing={productToEdit === product.id}
             />
           ))}
         </ul>
@@ -84,7 +89,14 @@ const ProductList: FC = () => {
         )}
 
         {showAddForm && (
-          <AddProductForm onClose={() => setShowAddForm(false)} />
+          <ProductEntryForm
+            action="add"
+            /**
+             * TODO: change
+             */
+            productIdentifier={{ sectionId: 'default' }}
+            onClose={() => setShowAddForm(false)}
+          />
         )}
       </div>
 

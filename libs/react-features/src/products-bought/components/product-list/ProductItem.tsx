@@ -5,15 +5,26 @@ import { ExpiringProduct } from '@posad/business-logic/types';
 import dayjs from 'dayjs';
 import { getProductImageUrl } from '@posad/business-logic/features/products-bought';
 import { useAuthContext } from '@posad/react-core/libs/firebase';
+import ProductEntryForm from './ProductEntryForm';
+import clsx from 'clsx';
 
 export type ProductItemProps = {
+  isEditing?: boolean;
   product: ExpiringProduct;
+  onEdit: () => void;
   onDelete: () => void;
+  onEditStop: () => void;
 };
 
-const ProductItem: FC<ProductItemProps> = ({ product, onDelete }) => {
+const ProductItem: FC<ProductItemProps> = ({
+  isEditing,
+  product,
+  onEdit,
+  onDelete,
+  onEditStop,
+}) => {
   const { firebaseUser } = useAuthContext();
-  const [imageUrl, setImageUrl] = useState<string | undefined>(undefined);
+  const [imageUrl, setImageUrl] = useState<string>('');
 
   /**
    * We're using a state variable and updating it everytime
@@ -31,33 +42,62 @@ const ProductItem: FC<ProductItemProps> = ({ product, onDelete }) => {
   }, [product.imageSource, product.imageUrl, firebaseUser]);
 
   return (
-    <li className="flex justify-between items-center border-b border-b-gray-200 pr-2 pb-3 gap-4 cursor-pointer">
-      <div className="flex items-center gap-4">
-        <img
-          className="w-[56px] h-[56px] bg-slate-100 rounded-full object-cover"
-          src={imageUrl}
-          alt=""
-        />
+    <li
+      className={clsx(
+        'flex border-b border-b-gray-200 pb-3 gap-4',
+        isEditing
+          ? 'flex-col items-stretch'
+          : 'justify-between items-center cursor-pointer pr-2'
+      )}
+    >
+      {!isEditing && (
+        <>
+          <div className="flex items-center gap-4">
+            <img
+              className="select-none w-[56px] h-[56px] bg-slate-100 rounded-full object-cover"
+              src={imageUrl}
+              alt=""
+            />
 
-        <div className="flex flex-col">
-          <div className="text-lg">{product.name}</div>
-          <div className="flex items-center gap-2">
-            <IconClock size={18} className="text-slate-600" />
-            <span className="text-slate-600">
-              {dayjs(product.expirationDate.toDate()).toNow(true)}
-            </span>
+            <div className="flex flex-col">
+              <div className="text-lg">{product.name}</div>
+              <div className="flex items-center gap-2">
+                <IconClock size={18} className="text-slate-600" />
+                <span className="text-slate-600">
+                  {dayjs(product.expirationDate.toDate()).fromNow()}
+                </span>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
 
-      <div className="flex gap-2">
-        <IconButton icon={IconEdit} label="Edit" />
-        <IconButton
-          icon={IconTrash}
-          label="Delete"
-          onClick={() => onDelete()}
+          <div className="flex gap-2">
+            <IconButton icon={IconEdit} label="Edit" onClick={() => onEdit()} />
+            <IconButton
+              icon={IconTrash}
+              label="Delete"
+              onClick={() => onDelete()}
+            />
+          </div>
+        </>
+      )}
+
+      {isEditing && (
+        <ProductEntryForm
+          action="edit"
+          onClose={() => onEditStop()}
+          productIdentifier={product}
+          initialValues={{
+            name: product.name,
+            expirationDate: product.expirationDate.toDate(),
+            image: {
+              path: product.imageUrl,
+              source: product.imageSource,
+              url: imageUrl,
+              originalFileName: product.imageUrl.split('/').pop(),
+            },
+          }}
         />
-      </div>
+      )}
     </li>
   );
 };

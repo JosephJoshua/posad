@@ -1,10 +1,15 @@
-import { addDoc, deleteDoc, doc } from 'firebase/firestore';
+import { addDoc, deleteDoc, doc, updateDoc } from 'firebase/firestore';
 import { getDownloadURL, uploadBytesResumable } from 'firebase/storage';
 import { collections, storageRefs } from '../../libs/firebase';
 import { ExpiringProduct } from '../../types';
 import { handleStorageError } from '../../libs/firebase';
 
 export type AddProductPayload = Omit<ExpiringProduct, 'id' | 'consumedAt'>;
+export type EditProductPayload = Required<
+  Pick<ExpiringProduct, 'id' | 'sectionId'>
+> &
+  Partial<Omit<ExpiringProduct, 'id' | 'sectionId'>>;
+
 export type DeleteProductPayload = {
   sectionId: string;
   productId: string;
@@ -17,6 +22,20 @@ export type UploadProductImageResult = {
 
 export const addProduct = async (uid: string, payload: AddProductPayload) => {
   return addDoc(collections.expiringProducts(uid, payload.sectionId), payload);
+};
+
+export const editProduct = async (uid: string, payload: EditProductPayload) => {
+  /**
+   * We don't want to allow the user to
+   * update the section this product belongs to
+   * with this API.
+   */
+  const { sectionId: _, ...data } = payload;
+
+  return updateDoc(
+    doc(collections.expiringProducts(uid, payload.sectionId), payload.id),
+    data
+  );
 };
 
 export const deleteProduct = async (

@@ -11,17 +11,40 @@ import { Timestamp } from 'firebase/firestore';
 import { useAuthContext } from '@posad/react-core/libs/firebase';
 import {
   addProduct,
-  addProductFormSchema,
-  AddProductFormValues,
+  editProduct,
+  EditProductPayload,
+  productEntryFormSchema,
+  ProductEntryFormValues,
 } from '@posad/business-logic/features/products-bought';
 import ProductImageDialog from './ProductImageDialog';
 import dayjs from 'dayjs';
+import { ExpiringProduct } from '@posad/business-logic/types';
 
-export type AddProductFormProps = {
+type BaseFormProps = {
   onClose?: () => void;
 };
 
-const AddProductForm: FC<AddProductFormProps> = ({ onClose }) => {
+type AddProductFormProps = {
+  action: 'add';
+  initialValues?: undefined;
+  productIdentifier: Pick<ExpiringProduct, 'sectionId'>;
+};
+
+type EditProductFormProps = {
+  action: 'edit';
+  initialValues: ProductEntryFormValues;
+  productIdentifier: Pick<ExpiringProduct, 'id' | 'sectionId'>;
+};
+
+export type ProductEntryFormProps = BaseFormProps &
+  (AddProductFormProps | EditProductFormProps);
+
+const ProductEntryForm: FC<ProductEntryFormProps> = ({
+  onClose,
+  initialValues,
+  productIdentifier,
+  action,
+}) => {
   const { firebaseUser } = useAuthContext();
 
   const containerRef = useRef<HTMLFormElement>(null);
@@ -40,9 +63,10 @@ const AddProductForm: FC<AddProductFormProps> = ({ onClose }) => {
     reset,
     control,
     formState: { isValid },
-  } = useForm<AddProductFormValues>({
-    resolver: yupResolver(addProductFormSchema),
+  } = useForm<ProductEntryFormValues>({
+    resolver: yupResolver(productEntryFormSchema),
     mode: 'onChange',
+    defaultValues: initialValues,
   });
 
   useEffect(() => {
@@ -58,23 +82,24 @@ const AddProductForm: FC<AddProductFormProps> = ({ onClose }) => {
     }
   };
 
-  const handleFormSubmit = async (values: AddProductFormValues) => {
+  const handleFormSubmit = async (values: ProductEntryFormValues) => {
     if (firebaseUser == null) return;
-
     setLoading(true);
 
-    /**
-     * TODO: change
-     */
-    const sectionId = 'default';
-
-    return addProduct(firebaseUser.uid, {
-      sectionId,
+    const params = {
+      ...productIdentifier,
       name: values.name,
       imageUrl: values.image.path,
       imageSource: values.image.source,
       expirationDate: Timestamp.fromDate(values.expirationDate),
-    })
+    };
+
+    const promise =
+      action === 'add'
+        ? addProduct(firebaseUser.uid, params)
+        : editProduct(firebaseUser.uid, params as EditProductPayload);
+
+    return promise
       .then(() => {
         reset();
         onClose?.();
@@ -189,11 +214,11 @@ const AddProductForm: FC<AddProductFormProps> = ({ onClose }) => {
           isLoading={isLoading}
           disabled={!isValid}
         >
-          Add product
+          {action === 'add' ? 'Add product' : 'Save'}
         </Button>
       </div>
     </form>
   );
 };
 
-export default AddProductForm;
+export default ProductEntryForm;

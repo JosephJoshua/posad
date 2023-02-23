@@ -1,7 +1,7 @@
 import * as yup from 'yup';
 import { ExpiringProductImageSources } from '../../types';
 
-export const addProductFormSchema = yup.object({
+export const productEntryFormSchema = yup.object({
   name: yup.string().required(),
   expirationDate: yup.date().required(),
   image: yup
@@ -14,5 +14,8 @@ export const addProductFormSchema = yup.object({
     .required(),
 });
 
-export type AddProductFormValues = yup.InferType<typeof addProductFormSchema>;
-export type ProductImageFormValue = AddProductFormValues['image'];
+export type ProductEntryFormValues = yup.InferType<
+  typeof productEntryFormSchema
+>;
+
+export type ProductImageFormValue = ProductEntryFormValues['image'];
