@@ -11,11 +11,15 @@ import {
   deleteProduct,
   listenToProductsInSection,
 } from '@posad/business-logic/features/products-bought';
+import clsx from 'clsx';
+import SectionEntryForm from './SectionEntryForm';
 
 const ProductList: FC = () => {
   const { firebaseUser } = useAuthContext();
 
-  const [showAddForm, setShowAddForm] = useState<boolean>(false);
+  const [showAddProductForm, setShowAddProductForm] = useState<boolean>(false);
+  const [showAddSectionForm, setShowAddSectionForm] = useState<boolean>(false);
+
   const [isDeleting, setDeleting] = useState<boolean>(false);
 
   const [productToEdit, setProductToEdit] = useState<string | null>(null);
@@ -78,24 +82,51 @@ const ProductList: FC = () => {
       )}
 
       <div className="mt-6">
-        {!showAddForm && (
+        {!showAddProductForm && (
           <IconButton
-            onClick={() => setShowAddForm(true)}
-            className="!justify-start"
+            onClick={() => setShowAddProductForm(true)}
+            className="!justify-start w-full"
             icon={IconPlus}
             label="Add Product"
             showLabel
           />
         )}
 
-        {showAddForm && (
+        {showAddProductForm && (
           <ProductEntryForm
             action="add"
             /**
              * TODO: change
              */
             productIdentifier={{ sectionId: 'default' }}
-            onClose={() => setShowAddForm(false)}
+            onClose={() => setShowAddProductForm(false)}
+          />
+        )}
+      </div>
+
+      <div className="mt-3">
+        {!showAddSectionForm && (
+          <button
+            className={clsx(
+              'w-full opacity-0 cursor-pointer',
+              'transition duration-300',
+              'hover:opacity-100'
+            )}
+            type="button"
+            onClick={() => setShowAddSectionForm(true)}
+          >
+            <div className="flex items-center gap-4 mt-4 select-none">
+              <div className="flex-1 h-px bg-primary-blue"></div>
+              <div>Add section</div>
+              <div className="flex-1 h-px bg-primary-blue"></div>
+            </div>
+          </button>
+        )}
+
+        {showAddSectionForm && (
+          <SectionEntryForm
+            action="add"
+            onClose={() => setShowAddSectionForm(false)}
           />
         )}
       </div>

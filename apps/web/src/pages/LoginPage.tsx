@@ -112,9 +112,9 @@ const LoginPage: FC = () => {
             <div className="text-red-500 mt-2">{errorMessage}</div>
           </form>
 
-          <div className="flex items-center mt-6 -mx-1.5">
+          <div className="flex items-center mt-6 -mx-1.5 gap-2">
             <div className="h-px bg-slate-300 flex-1"></div>
-            <div className="px-2 flex-1 text-center text-slate-500 leading-6">
+            <div className="flex-1 text-center text-slate-500 leading-6">
               or login with
             </div>
             <div className="h-px bg-slate-300 flex-1"></div>

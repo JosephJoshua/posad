@@ -1,8 +1,8 @@
 import { addDoc, deleteDoc, doc, updateDoc } from 'firebase/firestore';
 import { getDownloadURL, uploadBytesResumable } from 'firebase/storage';
-import { collections, storageRefs } from '../../libs/firebase';
-import { ExpiringProduct } from '../../types';
-import { handleStorageError } from '../../libs/firebase';
+import { collections, storageRefs } from '../../../libs/firebase';
+import { ExpiringProduct } from '../../../types';
+import { handleStorageError } from '../../../libs/firebase';
 
 export type AddProductPayload = Omit<ExpiringProduct, 'id' | 'consumedAt'>;
 export type EditProductPayload = Required<

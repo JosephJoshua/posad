@@ -1,3 +1,6 @@
-export * from './mutations';
-export * from './queries';
-export * from './formSchemas';
+export * from './products/mutations';
+export * from './products/queries';
+export * from './products/formSchemas';
+
+export * from './sections/formSchemas';
+export * from './sections/mutations';

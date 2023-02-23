@@ -1,8 +1,8 @@
 import { onSnapshot } from 'firebase/firestore';
 import { getDownloadURL, ref, StorageError } from 'firebase/storage';
-import { collections, storage } from '../../libs/firebase';
-import { ExpiringProduct } from '../../types';
-import { handleStorageError } from '../../libs/firebase';
+import { collections, storage } from '../../../libs/firebase';
+import { ExpiringProduct } from '../../../types';
+import { handleStorageError } from '../../../libs/firebase';
 
 export const listenToProductsInSection = (
   uid: string,

@@ -1,5 +1,5 @@
 import * as yup from 'yup';
-import { ExpiringProductImageSources } from '../../types';
+import { ExpiringProductImageSources } from '../../../types';
 
 export const productEntryFormSchema = yup.object({
   name: yup.string().required(),
