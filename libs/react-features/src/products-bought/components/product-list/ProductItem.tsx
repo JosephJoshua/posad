@@ -41,8 +41,13 @@ const ProductItem: FC<ProductItemProps> = ({
     setImageUrl(product.imageUrl);
   }, [product.imageSource, product.imageUrl, firebaseUser]);
 
+  const isExpired = dayjs().isSameOrAfter(
+    dayjs(product.expirationDate.toDate()),
+    'day'
+  );
+
   return (
-    <li
+    <div
       className={clsx(
         'flex border-b border-b-gray-200 pb-3 gap-4',
         isEditing
@@ -61,10 +66,17 @@ const ProductItem: FC<ProductItemProps> = ({
 
             <div className="flex flex-col">
               <div className="text-lg">{product.name}</div>
-              <div className="flex items-center gap-2">
-                <IconClock size={18} className="text-slate-600" />
-                <span className="text-slate-600">
-                  {dayjs(product.expirationDate.toDate()).fromNow()}
+              <div
+                className={clsx(
+                  'flex items-center gap-2',
+                  isExpired ? 'text-red-500' : 'text-slate-600'
+                )}
+              >
+                <IconClock size={18} />
+                <span>
+                  {isExpired
+                    ? 'Expired :('
+                    : dayjs(product.expirationDate.toDate()).fromNow()}
                 </span>
               </div>
             </div>
@@ -98,7 +110,7 @@ const ProductItem: FC<ProductItemProps> = ({
           }}
         />
       )}
-    </li>
+    </div>
   );
 };
 

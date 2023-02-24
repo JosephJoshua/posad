@@ -1,43 +1,38 @@
-import { IconButton } from '@posad/react-core/components/icon-button';
-import { IconMoodSad, IconPlus } from '@tabler/icons-react';
+import { IconMoodSad } from '@tabler/icons-react';
 import { FC, useEffect, useState } from 'react';
-import ProductEntryForm from './ProductEntryForm';
-import ProductItem from './ProductItem';
 import { SimpleDialog } from '@posad/react-core/components/simple-dialog';
 import { Button } from '@posad/react-core/components/button';
 import { useAuthContext } from '@posad/react-core/libs/firebase';
 import { ExpiringProduct } from '@posad/business-logic/types';
 import {
   deleteProduct,
-  listenToProductsInSection,
+  listenToAllProducts,
+  SectionWithProducts,
 } from '@posad/business-logic/features/products-bought';
-import clsx from 'clsx';
-import SectionEntryForm from './SectionEntryForm';
+import ProductSectionItem from './ProductSection';
 
 const ProductList: FC = () => {
   const { firebaseUser } = useAuthContext();
 
-  const [showAddProductForm, setShowAddProductForm] = useState<boolean>(false);
-  const [showAddSectionForm, setShowAddSectionForm] = useState<boolean>(false);
+  const [isDeletingProduct, setDeletingProduct] = useState<boolean>(false);
 
-  const [isDeleting, setDeleting] = useState<boolean>(false);
+  const [sectionAddingProduct, setSectionAddingProduct] = useState<
+    string | null
+  >(null);
+
+  const [sectionAdding, setSectionAdding] = useState<string | null>(null);
 
   const [productToEdit, setProductToEdit] = useState<string | null>(null);
   const [productToDelete, setProductToDelete] =
     useState<ExpiringProduct | null>(null);
 
-  const [products, setProducts] = useState<ExpiringProduct[]>([]);
+  const [data, setData] = useState<SectionWithProducts[]>([]);
 
   useEffect(() => {
     if (firebaseUser == null) return;
 
-    const unsubscribe = listenToProductsInSection(
-      firebaseUser.uid,
-      'default',
-      setProducts
-    );
-
-    return () => unsubscribe();
+    const unsubscribes = listenToAllProducts(firebaseUser.uid, setData);
+    return () => unsubscribes.forEach((unsubscribe) => unsubscribe());
   }, [firebaseUser]);
 
   const closeDeleteConfirmation = () => setProductToDelete(null);
@@ -45,17 +40,17 @@ const ProductList: FC = () => {
   const handleDelete = async () => {
     if (firebaseUser == null || productToDelete == null) return;
 
-    setDeleting(true);
+    setDeletingProduct(true);
 
     await deleteProduct(firebaseUser.uid, {
       sectionId: productToDelete.sectionId,
       productId: productToDelete.id,
-    }).finally(() => setDeleting(false));
+    }).finally(() => setDeletingProduct(false));
 
     closeDeleteConfirmation();
   };
 
-  const isEmpty = products.length === 0;
+  const isEmpty = data.length === 0;
 
   return (
     <>
@@ -68,68 +63,31 @@ const ProductList: FC = () => {
 
       {!isEmpty && (
         <ul className="mt-8 flex flex-col gap-6">
-          {products.map((product) => (
-            <ProductItem
-              key={product.id}
-              product={product}
-              onEdit={() => setProductToEdit(product.id)}
-              onDelete={() => setProductToDelete(product)}
-              onEditStop={() => setProductToEdit(null)}
-              isEditing={productToEdit === product.id}
-            />
+          {data.map((section) => (
+            <li key={section.id}>
+              <ProductSectionItem
+                section={section}
+                isAddingProduct={sectionAddingProduct === section.id}
+                isAddingSection={sectionAdding === section.id}
+                onAddProductChange={(val) =>
+                  setSectionAddingProduct(val ? section.id : null)
+                }
+                onAddSectionChange={(val) =>
+                  setSectionAdding(val ? section.id : null)
+                }
+                itemProps={(product) => ({
+                  onEdit: () => setProductToEdit(product.id),
+                  onDelete: () => setProductToDelete(product),
+                  onEditStop: () => setProductToEdit(null),
+                  isEditing: productToEdit === product.id,
+                })}
+              />
+            </li>
           ))}
         </ul>
       )}
 
-      <div className="mt-6">
-        {!showAddProductForm && (
-          <IconButton
-            onClick={() => setShowAddProductForm(true)}
-            className="!justify-start w-full"
-            icon={IconPlus}
-            label="Add Product"
-            showLabel
-          />
-        )}
-
-        {showAddProductForm && (
-          <ProductEntryForm
-            action="add"
-            /**
-             * TODO: change
-             */
-            productIdentifier={{ sectionId: 'default' }}
-            onClose={() => setShowAddProductForm(false)}
-          />
-        )}
-      </div>
-
-      <div className="mt-3">
-        {!showAddSectionForm && (
-          <button
-            className={clsx(
-              'w-full opacity-0 cursor-pointer',
-              'transition duration-300',
-              'hover:opacity-100'
-            )}
-            type="button"
-            onClick={() => setShowAddSectionForm(true)}
-          >
-            <div className="flex items-center gap-4 mt-4 select-none">
-              <div className="flex-1 h-px bg-primary-blue"></div>
-              <div>Add section</div>
-              <div className="flex-1 h-px bg-primary-blue"></div>
-            </div>
-          </button>
-        )}
-
-        {showAddSectionForm && (
-          <SectionEntryForm
-            action="add"
-            onClose={() => setShowAddSectionForm(false)}
-          />
-        )}
-      </div>
+      <div className="mt-3"></div>
 
       <SimpleDialog
         isOpen={productToDelete != null}
@@ -148,7 +106,7 @@ const ProductList: FC = () => {
             <Button
               variant="filled"
               size="sm"
-              isLoading={isDeleting}
+              isLoading={isDeletingProduct}
               onClick={() => handleDelete()}
             >
               Delete

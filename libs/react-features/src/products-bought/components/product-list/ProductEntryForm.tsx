@@ -52,9 +52,7 @@ const ProductEntryForm: FC<ProductEntryFormProps> = ({
   const [isLoading, setLoading] = useState<boolean>(false);
   const [imageDialogOpen, setImageDialogOpen] = useState<boolean>(false);
 
-  const [yesterday] = useState<Date>(() =>
-    dayjs().subtract(1, 'day').millisecond(0).toDate()
-  );
+  const [yesterday] = useState<Date>(() => dayjs().subtract(1, 'day').toDate());
 
   const {
     register,
@@ -88,6 +86,7 @@ const ProductEntryForm: FC<ProductEntryFormProps> = ({
 
     const params = {
       ...productIdentifier,
+      uid: firebaseUser.uid,
       name: values.name,
       imageUrl: values.image.path,
       imageSource: values.image.source,

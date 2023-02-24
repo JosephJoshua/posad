@@ -2,6 +2,7 @@ import { initializeApp } from 'firebase/app';
 import { getAuth, GoogleAuthProvider } from 'firebase/auth';
 import {
   collection,
+  collectionGroup,
   CollectionReference,
   DocumentData,
   getFirestore,
@@ -41,26 +42,36 @@ const createCollection = <T = DocumentData>(
   return collection(db, path, ...pathSegments) as CollectionReference<T>;
 };
 
-const USERS = 'users';
-const EXPIRING_PRODUCT_SECTIONS = 'expiring-product-sections';
-const EXPIRING_PRODUCTS = 'products';
+const createCollectionGroup = <T = DocumentData>(id: string) => {
+  return collectionGroup(db, id) as CollectionReference<T>;
+};
+
+const USERS_COL = 'users';
+const EXPIRING_PRODUCT_SECTIONS_COL = 'expiring-product-sections';
+const EXPIRING_PRODUCTS_COL = 'expiring-products';
 
 export const collections = {
-  users: createCollection<Omit<User, 'id'>>(USERS),
+  users: createCollection<Omit<User, 'id'>>(USERS_COL),
   expiringProductSections: (userId: string) =>
     createCollection<Omit<ExpiringProductSection, 'id'>>(
-      USERS,
+      USERS_COL,
       userId,
-      EXPIRING_PRODUCT_SECTIONS
+      EXPIRING_PRODUCT_SECTIONS_COL
     ),
   expiringProducts: (userId: string, sectionId: string) =>
     createCollection<Omit<ExpiringProduct, 'id'>>(
-      USERS,
+      USERS_COL,
       userId,
-      EXPIRING_PRODUCT_SECTIONS,
+      EXPIRING_PRODUCT_SECTIONS_COL,
       sectionId,
-      EXPIRING_PRODUCTS
+      EXPIRING_PRODUCTS_COL
     ),
+};
+
+export const collectionGroups = {
+  expiringProducts: createCollectionGroup<Omit<ExpiringProduct, 'id'>>(
+    EXPIRING_PRODUCTS_COL
+  ),
 };
 
 /**

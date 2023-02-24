@@ -1,8 +1,59 @@
-import { onSnapshot } from 'firebase/firestore';
+import { onSnapshot, query, where } from 'firebase/firestore';
 import { getDownloadURL, ref, StorageError } from 'firebase/storage';
-import { collections, storage } from '../../../libs/firebase';
-import { ExpiringProduct } from '../../../types';
+import { collectionGroups, collections, storage } from '../../../libs/firebase';
+import { ExpiringProduct, ExpiringProductSection } from '../../../types';
 import { handleStorageError } from '../../../libs/firebase';
+
+export type SectionWithProducts = ExpiringProductSection & {
+  products: ExpiringProduct[];
+};
+
+export const listenToAllProducts = (
+  uid: string,
+  callback: (data: SectionWithProducts[]) => void
+) => {
+  const sections: Map<string, Omit<ExpiringProductSection, 'id'>> = new Map();
+  const products: ExpiringProduct[] = [];
+
+  const onCallback = () => {
+    const result: Map<string, SectionWithProducts> = new Map();
+
+    sections.forEach((section, id) => {
+      result.set(id, { ...section, id, products: [] });
+    });
+
+    products.forEach((product) => {
+      result.get(product.sectionId)?.products.push(product);
+    });
+
+    callback(Array.from(result.values()));
+  };
+
+  return [
+    onSnapshot(collections.expiringProductSections(uid), (snap) => {
+      sections.clear();
+      snap.docs.forEach((doc) => {
+        sections.set(doc.id, doc.data());
+      });
+
+      onCallback();
+    }),
+    onSnapshot(
+      query(collectionGroups.expiringProducts, where('uid', '==', uid)),
+      (snap) => {
+        products.splice(0, products.length);
+        products.push(
+          ...snap.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          }))
+        );
+
+        onCallback();
+      }
+    ),
+  ];
+};
 
 export const listenToProductsInSection = (
   uid: string,

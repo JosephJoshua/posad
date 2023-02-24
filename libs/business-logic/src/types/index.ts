@@ -1,4 +1,5 @@
 export * from './ExpiringProduct';
+export * from './ExpiringProductSection';
 
 export { type default as User } from './User';
 export { type default as ExpiringProduct } from './ExpiringProduct';
