@@ -4,9 +4,16 @@ import {
   signInWithPopup,
   UserCredential,
 } from 'firebase/auth';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
-import { auth, collections, googleProvider } from '../../libs/firebase';
+import {
+  doc,
+  getDoc,
+  setDoc,
+  WriteBatch,
+  writeBatch,
+} from 'firebase/firestore';
+import { auth, collections, db, googleProvider } from '../../libs/firebase';
 import { handleAuthError } from '../../libs/firebase';
+import { INITIAL_PRODUCT_SECTION } from '../../types/ExpiringProductSection';
 
 export type LoginCredentials = {
   email: string;
@@ -17,6 +24,15 @@ export type RegisterCredentials = {
   name: string;
   email: string;
   password: string;
+};
+
+const addInitialExpiringProductSection = (uid: string, batch: WriteBatch) => {
+  return batch.set(
+    doc(collections.expiringProductSections(uid), INITIAL_PRODUCT_SECTION),
+    {
+      name: 'Initial',
+    }
+  );
 };
 
 export const loginWithCredentials = async (
@@ -40,11 +56,16 @@ export const authenticateWithGoogle = async () => {
     const userDoc = await getDoc(doc(collections.users, user.uid));
 
     if (!userDoc.exists()) {
-      await setDoc(doc(collections.users, user.uid), {
+      const batch = writeBatch(db);
+
+      batch.set(doc(collections.users, user.uid), {
         name: user.displayName ?? '',
         email: user.email ?? '',
         authProvider: 'google',
       });
+
+      addInitialExpiringProductSection(user.uid, batch);
+      await batch.commit();
     }
   } catch (err) {
     handleAuthError(err);
@@ -65,11 +86,16 @@ export const registerWithCredentials = async (
       user: { uid },
     } = result;
 
-    await setDoc(doc(collections.users, uid), {
+    const batch = writeBatch(db);
+
+    batch.set(doc(collections.users, uid), {
       name: credentials.name,
       email: credentials.email,
       authProvider: 'email',
     });
+
+    addInitialExpiringProductSection(uid, batch);
+    await batch.commit();
   } catch (err) {
     handleAuthError(err);
   }

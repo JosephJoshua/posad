@@ -16,10 +16,16 @@ const ProductList: FC = () => {
 
   const [isDeletingProduct, setDeletingProduct] = useState<boolean>(false);
 
+  /**
+   * The id of the section that currently has the add product form shown.
+   */
   const [sectionAddingProduct, setSectionAddingProduct] = useState<
     string | null
   >(null);
 
+  /**
+   * The id of the section that currently has the add section form shown.
+   */
   const [sectionAdding, setSectionAdding] = useState<string | null>(null);
 
   const [productToEdit, setProductToEdit] = useState<string | null>(null);
@@ -86,8 +92,6 @@ const ProductList: FC = () => {
           ))}
         </ul>
       )}
-
-      <div className="mt-3"></div>
 
       <SimpleDialog
         isOpen={productToDelete != null}
