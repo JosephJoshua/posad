@@ -1,9 +1,11 @@
-import { FC, Fragment, useState } from 'react';
+import { FC, Fragment, useEffect, useState } from 'react';
 import { ParentSize } from '@visx/responsive';
 import { Listbox, Transition } from '@headlessui/react';
-import WentBadChart from './WentBadChart';
+import WentBadChart, { WentBadDataPoint } from './WentBadChart';
 import { IconCheck, IconChevronDown } from '@tabler/icons-react';
 import clsx from 'clsx';
+import { listenToProductsWentBadAggregation } from '@posad/business-logic/features/home';
+import { useAuthContext } from '@posad/react-core/libs/firebase';
 
 type Timeframe = 'week' | 'month' | 'year';
 
@@ -14,7 +16,24 @@ const timeframes: Record<Timeframe, string> = {
 } as const;
 
 const WentBadContainer: FC = () => {
+  const { firebaseUser } = useAuthContext();
+
+  const [data, setData] = useState<WentBadDataPoint[]>([]);
   const [selectedTimeframe, setSelectedTimeframe] = useState<Timeframe>('week');
+
+  console.log(data);
+
+  useEffect(() => {
+    if (firebaseUser == null) return;
+    listenToProductsWentBadAggregation(firebaseUser.uid, (data) =>
+      setData(
+        data.map((dp) => ({
+          date: dp.date,
+          value: dp.qty,
+        }))
+      )
+    );
+  }, [firebaseUser]);
 
   return (
     <div className="bg-blue-500 text-white p-5 rounded-2xl">
@@ -94,20 +113,7 @@ const WentBadContainer: FC = () => {
       </div>
 
       <ParentSize className="mt-4">
-        {({ width }) => (
-          <WentBadChart
-            data={[
-              { date: new Date(2023, 2, 20), value: 50 },
-              { date: new Date(2023, 2, 21), value: 51 },
-              { date: new Date(2023, 2, 22), value: 43 },
-              { date: new Date(2023, 2, 23), value: 30 },
-              { date: new Date(2023, 2, 24), value: 76 },
-              { date: new Date(2023, 2, 25), value: 57 },
-            ]}
-            width={width}
-            height={200}
-          />
-        )}
+        {({ width }) => <WentBadChart data={data} width={width} height={200} />}
       </ParentSize>
     </div>
   );

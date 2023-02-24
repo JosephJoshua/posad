@@ -1,16 +1,11 @@
 import { CSSProperties, FC } from 'react';
-import {
-  Icon,
-  IconHome,
-  IconBasket,
-  IconLogout,
-  IconFridge,
-} from '@tabler/icons-react';
+import { Icon, IconHome, IconLogout, IconFridge } from '@tabler/icons-react';
 import { clsx } from 'clsx';
 import { NavLink } from 'react-router-dom';
 import { signOut } from 'firebase/auth';
 import { auth } from '@posad/business-logic/libs/firebase';
 import { Button } from '../../../components/button';
+import { useAuthContext } from '@posad/react-core/libs/firebase';
 
 export type AppDrawerProps = {
   className?: string;
@@ -34,14 +29,11 @@ const drawerItems: readonly DrawerItem[] = Object.freeze([
     icon: IconFridge,
     title: 'Products Bought',
   },
-  {
-    to: '/shop',
-    icon: IconBasket,
-    title: 'Shop',
-  },
 ]);
 
 const AppDrawer: FC<AppDrawerProps> = ({ className, style }) => {
+  const { userData } = useAuthContext();
+
   return (
     <div
       className={clsx('flex flex-col px-4 pt-8 pb-4', className)}
@@ -51,8 +43,12 @@ const AppDrawer: FC<AppDrawerProps> = ({ className, style }) => {
 
       <div className="flex-1 flex flex-col mt-16 gap-16">
         <div className="flex flex-col items-center gap-2">
-          <div className="rounded-full bg-slate-100 w-20 h-20"></div>
-          <div>User 1</div>
+          <img
+            className="rounded-full w-20 h-20"
+            src="https://api.dicebear.com/5.x/bottts/svg"
+          />
+
+          <div>{userData?.name}</div>
         </div>
 
         <div className="flex flex-col gap-2 -mr-4 pr-4 overflow-y-scroll">
