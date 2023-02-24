@@ -52,7 +52,7 @@ const ProductItem: FC<ProductItemProps> = ({
         'flex border-b border-b-gray-200 pb-3 gap-4',
         isEditing
           ? 'flex-col items-stretch'
-          : 'justify-between items-center cursor-pointer pr-2'
+          : 'justify-between items-center cursor-pointer'
       )}
     >
       {!isEditing && (

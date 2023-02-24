@@ -1,10 +1,19 @@
 import { collections, db } from '@posad/business-logic/libs/firebase';
 import { ExpiringProductSection } from '@posad/business-logic/types';
-import { doc, runTransaction, updateDoc } from 'firebase/firestore';
+import {
+  arrayRemove,
+  deleteDoc,
+  doc,
+  runTransaction,
+  updateDoc,
+  writeBatch,
+} from 'firebase/firestore';
 
 export type AddSectionPayload = Omit<ExpiringProductSection, 'id'>;
 export type EditSectionPayload = Required<Pick<ExpiringProductSection, 'id'>> &
   Partial<Omit<ExpiringProductSection, 'id'>>;
+
+export type DeleteSectionPayload = Pick<ExpiringProductSection, 'id'>['id'];
 
 export const addSection = async (
   uid: string,
@@ -42,4 +51,18 @@ export const editSection = async (uid: string, payload: EditSectionPayload) => {
     doc(collections.expiringProductSections(uid), payload.id),
     payload
   );
+};
+
+export const deleteSection = async (
+  uid: string,
+  payload: DeleteSectionPayload
+) => {
+  const batch = writeBatch(db);
+
+  batch.delete(doc(collections.expiringProductSections(uid), payload));
+  batch.update(doc(collections.userDataOrders, uid), {
+    expiringProductSections: arrayRemove(payload),
+  });
+
+  return batch.commit();
 };

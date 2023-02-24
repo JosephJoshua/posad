@@ -6,6 +6,7 @@ import { useAuthContext } from '@posad/react-core/libs/firebase';
 import { ExpiringProduct } from '@posad/business-logic/types';
 import {
   deleteProduct,
+  deleteSection,
   listenToAllProducts,
   SectionWithProducts,
 } from '@posad/business-logic/features/products-bought';
@@ -14,7 +15,7 @@ import ProductSectionItem from './ProductSection';
 const ProductList: FC = () => {
   const { firebaseUser } = useAuthContext();
 
-  const [isDeletingProduct, setDeletingProduct] = useState<boolean>(false);
+  const [isDeleting, setDeleting] = useState<boolean>(false);
 
   /**
    * The id of the section that currently has the add product form shown.
@@ -27,6 +28,7 @@ const ProductList: FC = () => {
    * The id of the section that currently has the add section form shown.
    */
   const [sectionAdding, setSectionAdding] = useState<string | null>(null);
+  const [sectionToDelete, setSectionToDelete] = useState<string | null>(null);
 
   const [productToEdit, setProductToEdit] = useState<string | null>(null);
   const [productToDelete, setProductToDelete] =
@@ -41,19 +43,32 @@ const ProductList: FC = () => {
     return () => unsubscribes.forEach((unsubscribe) => unsubscribe());
   }, [firebaseUser]);
 
-  const closeDeleteConfirmation = () => setProductToDelete(null);
+  const closeProductDeleteConfirmation = () => setProductToDelete(null);
+  const closeSectionDeleteConfirmation = () => setSectionToDelete(null);
 
-  const handleDelete = async () => {
+  const handleDeleteProduct = async () => {
     if (firebaseUser == null || productToDelete == null) return;
 
-    setDeletingProduct(true);
+    setDeleting(true);
 
     await deleteProduct(firebaseUser.uid, {
       sectionId: productToDelete.sectionId,
       productId: productToDelete.id,
-    }).finally(() => setDeletingProduct(false));
+    }).finally(() => setDeleting(false));
 
-    closeDeleteConfirmation();
+    closeProductDeleteConfirmation();
+  };
+
+  const handleDeleteSection = async () => {
+    if (firebaseUser == null || sectionToDelete == null) return;
+
+    setDeleting(true);
+
+    await deleteSection(firebaseUser.uid, sectionToDelete).finally(() =>
+      setDeleting(false)
+    );
+
+    closeSectionDeleteConfirmation();
   };
 
   const isEmpty = data.length === 0;
@@ -81,6 +96,7 @@ const ProductList: FC = () => {
                 onAddSectionChange={(val) =>
                   setSectionAdding(val ? section.id : null)
                 }
+                onDeleteSection={() => setSectionToDelete(section.id)}
                 itemProps={(product) => ({
                   onEdit: () => setProductToEdit(product.id),
                   onDelete: () => setProductToDelete(product),
@@ -94,15 +110,15 @@ const ProductList: FC = () => {
       )}
 
       <SimpleDialog
-        isOpen={productToDelete != null}
-        onClose={closeDeleteConfirmation}
-        title="Delete product"
+        isOpen={sectionToDelete != null}
+        onClose={closeSectionDeleteConfirmation}
+        title="Delete section"
         actions={
           <div className="flex justify-end gap-2 mt-4">
             <Button
               variant="filled-ghost"
               size="sm"
-              onClick={() => closeDeleteConfirmation()}
+              onClick={() => closeSectionDeleteConfirmation()}
             >
               Cancel
             </Button>
@@ -110,8 +126,36 @@ const ProductList: FC = () => {
             <Button
               variant="filled"
               size="sm"
-              isLoading={isDeletingProduct}
-              onClick={() => handleDelete()}
+              isLoading={isDeleting}
+              onClick={() => handleDeleteSection()}
+            >
+              Delete
+            </Button>
+          </div>
+        }
+      >
+        Are you sure you want to delete this section?
+      </SimpleDialog>
+
+      <SimpleDialog
+        isOpen={productToDelete != null}
+        onClose={closeProductDeleteConfirmation}
+        title="Delete product"
+        actions={
+          <div className="flex justify-end gap-2 mt-4">
+            <Button
+              variant="filled-ghost"
+              size="sm"
+              onClick={() => closeProductDeleteConfirmation()}
+            >
+              Cancel
+            </Button>
+
+            <Button
+              variant="filled"
+              size="sm"
+              isLoading={isDeleting}
+              onClick={() => handleDeleteProduct()}
             >
               Delete
             </Button>

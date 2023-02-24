@@ -7,7 +7,6 @@ import { useAuthContext } from '@posad/react-core/libs/firebase';
 import {
   addSection,
   editSection,
-  ProductEntryFormValues,
   sectionEntryFormSchema,
   SectionEntryFormValues,
 } from '@posad/business-logic/features/products-bought';
@@ -15,19 +14,20 @@ import { useForm } from 'react-hook-form';
 
 type BaseFormProps = {
   onClose?: () => void;
-  sectionBeforeId: string;
 };
 
 type AddSectionFormProps = {
   action: 'add';
+  sectionBeforeId: string;
   initialValues?: undefined;
   sectionId?: undefined;
 };
 
 type EditSectionFormProps = {
   action: 'edit';
-  initialValues: ProductEntryFormValues;
+  initialValues: SectionEntryFormValues;
   sectionId: string;
+  sectionBeforeId?: undefined;
 };
 
 export type ProductEntryFormProps = BaseFormProps &

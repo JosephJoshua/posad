@@ -4,8 +4,13 @@ import {
   ExpiringProduct,
   INITIAL_PRODUCT_SECTION,
 } from '@posad/business-logic/types';
-import { IconChevronUp, IconPlus } from '@tabler/icons-react';
-import { FC } from 'react';
+import {
+  IconChevronUp,
+  IconEdit,
+  IconPlus,
+  IconTrash,
+} from '@tabler/icons-react';
+import { FC, MouseEvent, useState } from 'react';
 import ProductItem, { ProductItemProps } from './ProductItem';
 import clsx from 'clsx';
 import ProductEntryForm from './ProductEntryForm';
@@ -17,6 +22,7 @@ export type ProductSectionItemProps = {
   isAddingSection: boolean;
   onAddProductChange: (open: boolean) => void;
   onAddSectionChange: (open: boolean) => void;
+  onDeleteSection: () => void;
   section: SectionWithProducts;
   itemProps: (product: ExpiringProduct) => Omit<ProductItemProps, 'product'>;
 };
@@ -28,8 +34,17 @@ const ProductSectionItem: FC<ProductSectionItemProps> = ({
   isAddingSection,
   onAddProductChange,
   onAddSectionChange,
+  onDeleteSection,
 }) => {
+  const [isEditing, setEditing] = useState<boolean>(false);
   const isEmpty = section.products.length === 0;
+
+  const handleDisclosureAction = (fn: () => void) => {
+    return (event: MouseEvent<HTMLButtonElement>) => {
+      event.stopPropagation();
+      fn();
+    };
+  };
 
   const addProductForm = !isAddingProduct ? (
     <IconButton
@@ -90,17 +105,36 @@ const ProductSectionItem: FC<ProductSectionItemProps> = ({
     <Disclosure as="div" className="flex flex-col gap-4">
       {({ open }) => (
         <>
-          <Disclosure.Button className="flex items-center gap-3 border-b border-b-gray-200 pb-3">
-            <IconChevronUp
-              size={20}
-              className={clsx(
-                open && 'transform rotate-180',
-                'transition duration-200',
-                'text-gray-500'
-              )}
-            />
+          <Disclosure.Button
+            as="div"
+            className="flex justify-between items-center gap-3 border-b border-b-gray-200 pb-3"
+          >
+            <button className="flex flex-1 items-center gap-3" type="button">
+              <IconChevronUp
+                size={20}
+                className={clsx(
+                  open && 'transform rotate-180',
+                  'transition duration-200',
+                  'text-gray-500'
+                )}
+              />
 
-            <span className="font-medium">{section.name}</span>
+              <span className="font-medium">{section.name}</span>
+            </button>
+
+            <div className="flex gap-2">
+              <IconButton
+                icon={IconEdit}
+                label="Edit"
+                onClick={handleDisclosureAction(() => setEditing(true))}
+              />
+
+              <IconButton
+                icon={IconTrash}
+                label="Delete"
+                onClick={handleDisclosureAction(onDeleteSection)}
+              />
+            </div>
           </Disclosure.Button>
 
           <Disclosure.Panel>{products}</Disclosure.Panel>
@@ -109,7 +143,18 @@ const ProductSectionItem: FC<ProductSectionItemProps> = ({
     </Disclosure>
   );
 
-  return section.id === INITIAL_PRODUCT_SECTION ? products : disclosure;
+  const sectionElement = !isEditing ? (
+    disclosure
+  ) : (
+    <SectionEntryForm
+      action="edit"
+      onClose={() => setEditing(false)}
+      sectionId={section.id}
+      initialValues={section}
+    />
+  );
+
+  return section.id === INITIAL_PRODUCT_SECTION ? products : sectionElement;
 };
 
 export default ProductSectionItem;
