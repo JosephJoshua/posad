@@ -54,6 +54,9 @@
       "@posad/business-logic/features/auth": [
         "libs/business-logic/src/features/auth/index.ts"
       ],
+      "@posad/business-logic/features/home": [
+        "libs/business-logic/src/features/home/index.ts"
+      ],
       "@posad/business-logic/features/products-bought": [
         "libs/business-logic/src/features/products-bought/index.ts"
       ],
