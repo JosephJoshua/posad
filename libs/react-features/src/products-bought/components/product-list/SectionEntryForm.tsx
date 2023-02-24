@@ -15,6 +15,7 @@ import { useForm } from 'react-hook-form';
 
 type BaseFormProps = {
   onClose?: () => void;
+  sectionBeforeId: string;
 };
 
 type AddSectionFormProps = {
@@ -36,6 +37,7 @@ const SectionEntryForm: FC<ProductEntryFormProps> = ({
   onClose,
   initialValues,
   sectionId,
+  sectionBeforeId,
   action,
 }) => {
   const { firebaseUser } = useAuthContext();
@@ -74,7 +76,7 @@ const SectionEntryForm: FC<ProductEntryFormProps> = ({
 
     const promise =
       action === 'add'
-        ? addSection(firebaseUser.uid, values)
+        ? addSection(firebaseUser.uid, sectionBeforeId, values)
         : editSection(firebaseUser.uid, { ...values, id: sectionId });
 
     return promise

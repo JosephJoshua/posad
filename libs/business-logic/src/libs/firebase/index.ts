@@ -9,6 +9,7 @@ import {
 } from 'firebase/firestore';
 import { getStorage, ref } from 'firebase/storage';
 import { ExpiringProduct, ExpiringProductSection, User } from '../../types';
+import UserDataOrder from '../../types/UserDataOrder';
 
 const config = {
   apiKey: 'AIzaSyD9gRTS4ogqkDA98AwCKpt4x6wp-OHXz_A',
@@ -49,6 +50,7 @@ const createCollectionGroup = <T = DocumentData>(id: string) => {
 const USERS_COL = 'users';
 const EXPIRING_PRODUCT_SECTIONS_COL = 'expiring-product-sections';
 const EXPIRING_PRODUCTS_COL = 'expiring-products';
+const USER_DATA_ORDERS_COL = 'user-data-orders';
 
 export const collections = {
   users: createCollection<Omit<User, 'id'>>(USERS_COL),
@@ -66,6 +68,8 @@ export const collections = {
       sectionId,
       EXPIRING_PRODUCTS_COL
     ),
+  userDataOrders:
+    createCollection<Omit<UserDataOrder, 'uid'>>(USER_DATA_ORDERS_COL),
 };
 
 export const collectionGroups = {

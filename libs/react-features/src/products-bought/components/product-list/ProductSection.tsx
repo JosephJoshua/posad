@@ -64,7 +64,11 @@ const ProductSectionItem: FC<ProductSectionItemProps> = ({
       </div>
     </button>
   ) : (
-    <SectionEntryForm action="add" onClose={() => onAddSectionChange(false)} />
+    <SectionEntryForm
+      action="add"
+      sectionBeforeId={section.id}
+      onClose={() => onAddSectionChange(false)}
+    />
   );
 
   const products = (

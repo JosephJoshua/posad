@@ -4,13 +4,7 @@ import {
   signInWithPopup,
   UserCredential,
 } from 'firebase/auth';
-import {
-  doc,
-  getDoc,
-  setDoc,
-  WriteBatch,
-  writeBatch,
-} from 'firebase/firestore';
+import { doc, getDoc, WriteBatch, writeBatch } from 'firebase/firestore';
 import { auth, collections, db, googleProvider } from '../../libs/firebase';
 import { handleAuthError } from '../../libs/firebase';
 import { INITIAL_PRODUCT_SECTION } from '../../types/ExpiringProductSection';
@@ -27,12 +21,16 @@ export type RegisterCredentials = {
 };
 
 const addInitialExpiringProductSection = (uid: string, batch: WriteBatch) => {
-  return batch.set(
+  batch.set(
     doc(collections.expiringProductSections(uid), INITIAL_PRODUCT_SECTION),
     {
-      name: 'Initial',
+      name: INITIAL_PRODUCT_SECTION,
     }
   );
+
+  return batch.set(doc(collections.userDataOrders, uid), {
+    expiringProductSections: [INITIAL_PRODUCT_SECTION],
+  });
 };
 
 export const loginWithCredentials = async (
