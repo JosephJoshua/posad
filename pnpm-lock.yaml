@@ -113,7 +113,7 @@ importers:
       '@nrwl/cypress': 15.7.1_6n4f2rwuhvpw5imoffnqnzxkfi
       '@nrwl/eslint-plugin-nx': 15.7.1_m3mqoaoafklozr7ofhazpuzr44
       '@nrwl/linter': 15.7.1_iqgqupxdglb7pgajvbq75etfrq
-      '@nrwl/nx-cloud': 15.1.0
+      '@nrwl/nx-cloud': 15.1.1
       '@nrwl/react': 15.7.1_dyncpcr5iyffxc3sfnie4c7kui
       '@nrwl/vite': 15.7.1_y7njedlqdi5ecwnzqsklu2yxta
       '@nrwl/workspace': 15.7.1_b7txxddvmzl7yi5h32xq2kwhia
@@ -2528,8 +2528,8 @@ packages:
       - typescript
     dev: true
 
-  /@nrwl/nx-cloud/15.1.0:
-    resolution: {integrity: sha512-QcMlPZ+DBzTWcoWSziyrENYhBLfE5MSns3M5qJB8EClg9/vomepA+NLOLWB+/O0sfdeBGFKlvFyrjf+CnVaB2A==}
+  /@nrwl/nx-cloud/15.1.1:
+    resolution: {integrity: sha512-aIVb87PQpAjwdEaFksQ3rYgFq9MDaBG2KvYZcj/k+z2uWeWH84ha/opO37aCFLf5VXNiyJZGRb/+7vW7BFpNOw==}
     hasBin: true
     dependencies:
       axios: 0.21.4

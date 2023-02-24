@@ -58,10 +58,16 @@ export const listenToAllProducts = (
       (snap) => {
         products.splice(0, products.length);
         products.push(
-          ...snap.docs.map((doc) => ({
-            id: doc.id,
-            ...doc.data(),
-          }))
+          ...snap.docs.reduce<ExpiringProduct[]>(
+            (acc, doc) =>
+              doc.data().consumedAt != null
+                ? acc
+                : acc.concat({
+                    id: doc.id,
+                    ...doc.data(),
+                  }),
+            []
+          )
         );
 
         onCallback();

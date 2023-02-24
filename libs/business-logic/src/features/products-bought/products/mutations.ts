@@ -1,8 +1,19 @@
-import { addDoc, deleteDoc, doc, updateDoc } from 'firebase/firestore';
+import {
+  addDoc,
+  deleteDoc,
+  doc,
+  serverTimestamp,
+  updateDoc,
+} from 'firebase/firestore';
 import { getDownloadURL, uploadBytesResumable } from 'firebase/storage';
 import { collections, storageRefs } from '../../../libs/firebase';
 import { ExpiringProduct } from '../../../types';
 import { handleStorageError } from '../../../libs/firebase';
+
+export type ProductIdentifier = {
+  sectionId: string;
+  productId: string;
+};
 
 export type AddProductPayload = Omit<ExpiringProduct, 'id' | 'consumedAt'>;
 export type EditProductPayload = Required<
@@ -10,10 +21,8 @@ export type EditProductPayload = Required<
 > &
   Partial<Omit<ExpiringProduct, 'id' | 'sectionId'>>;
 
-export type DeleteProductPayload = {
-  sectionId: string;
-  productId: string;
-};
+export type DeleteProductPayload = ProductIdentifier;
+export type CompleteProductPayload = ProductIdentifier;
 
 export type UploadProductImageResult = {
   path: string;
@@ -44,6 +53,21 @@ export const deleteProduct = async (
 ) => {
   return deleteDoc(
     doc(collections.expiringProducts(uid, payload.sectionId), payload.productId)
+  );
+};
+
+export const completeProduct = async (
+  uid: string,
+  payload: CompleteProductPayload
+) => {
+  return updateDoc(
+    doc(
+      collections.expiringProducts(uid, payload.sectionId),
+      payload.productId
+    ),
+    {
+      consumedAt: serverTimestamp(),
+    }
   );
 };
 
