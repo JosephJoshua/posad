@@ -28,6 +28,9 @@
       "@posad/react-core/components/simple-dialog": [
         "libs/react-core/src/components/simple-dialog/index.ts"
       ],
+      "@posad/react-core/components/loading-page": [
+        "libs/react-core/src/components/loading-page/index.ts"
+      ],
 
       // react-core/hooks
       "@posad/react-core/hooks": ["libs/react-core/src/hooks/index.ts"],

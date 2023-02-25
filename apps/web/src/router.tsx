@@ -1,3 +1,4 @@
+import { LoadingPage } from '@posad/react-core/components/loading-page';
 import { useAuthContext } from '@posad/react-core/libs/firebase';
 import { FC } from 'react';
 import {
@@ -16,7 +17,7 @@ const ProtectedRoute: FC = () => {
   const { isLoading, isAuthenticated } = useAuthContext();
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <LoadingPage />;
   }
 
   if (!isAuthenticated) {
@@ -30,7 +31,7 @@ const AuthRoute: FC = () => {
   const { isLoading, isAuthenticated } = useAuthContext();
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <LoadingPage />;
   }
 
   if (isAuthenticated) {

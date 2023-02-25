@@ -21,8 +21,6 @@ const WentBadContainer: FC = () => {
   const [data, setData] = useState<WentBadDataPoint[]>([]);
   const [selectedTimeframe, setSelectedTimeframe] = useState<Timeframe>('week');
 
-  console.log(data);
-
   useEffect(() => {
     if (firebaseUser == null) return;
     listenToProductsWentBadAggregation(firebaseUser.uid, (data) =>
