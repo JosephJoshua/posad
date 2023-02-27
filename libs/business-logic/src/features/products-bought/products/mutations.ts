@@ -9,6 +9,7 @@ import { getDownloadURL, uploadBytesResumable } from 'firebase/storage';
 import { collections, storageRefs } from '../../../libs/firebase';
 import { ExpiringProduct } from '../../../types';
 import { handleStorageError } from '../../../libs/firebase';
+import { isExpired } from './utils';
 
 export type ProductIdentifier = {
   sectionId: string;
@@ -60,13 +61,21 @@ export const completeProduct = async (
   uid: string,
   payload: CompleteProductPayload
 ) => {
+  /**
+   * Use the JS `Date` instead of Firestore's `serverTimestamp`
+   * so we can perform checks on the date the product
+   * was completed at.
+   */
+  const now = new Date();
+
   return updateDoc(
     doc(
       collections.expiringProducts(uid, payload.sectionId),
       payload.productId
     ),
     {
-      consumedAt: serverTimestamp(),
+      consumedAt: now,
+      isOnTime: !isExpired(now),
     }
   );
 };

@@ -6,6 +6,7 @@ import dayjs from 'dayjs';
 import {
   completeProduct,
   getProductImageUrl,
+  isProductExpired,
 } from '@posad/business-logic/features/products-bought';
 import { useAuthContext } from '@posad/react-core/libs/firebase';
 import ProductEntryForm from './ProductEntryForm';
@@ -60,11 +61,6 @@ const ProductItem: FC<ProductItemProps> = ({
     }
   }, [isDone, firebaseUser, product]);
 
-  const isExpired = dayjs().isSameOrAfter(
-    dayjs(product.expirationDate.toDate()),
-    'day'
-  );
-
   return (
     <div
       className={clsx(
@@ -105,12 +101,12 @@ const ProductItem: FC<ProductItemProps> = ({
               <div
                 className={clsx(
                   'flex items-center gap-2',
-                  isExpired ? 'text-red-500' : 'text-slate-600'
+                  isProductExpired(product) ? 'text-red-500' : 'text-slate-600'
                 )}
               >
                 <IconClock size={18} />
                 <span>
-                  {isExpired
+                  {isProductExpired(product)
                     ? 'Expired :('
                     : dayjs(product.expirationDate.toDate()).fromNow()}
                 </span>

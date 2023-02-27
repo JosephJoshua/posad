@@ -11,6 +11,7 @@ type ExpiringProduct = {
   imageSource: (typeof ExpiringProductImageSources)[number];
   expirationDate: Timestamp;
   consumedAt?: Timestamp;
+  isOnTime?: boolean;
 };
 
 export default ExpiringProduct;

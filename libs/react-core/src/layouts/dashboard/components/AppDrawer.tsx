@@ -44,7 +44,7 @@ const AppDrawer: FC<AppDrawerProps> = ({ className, style }) => {
       <div className="flex-1 flex flex-col mt-16 gap-16">
         <div className="flex flex-col items-center gap-2">
           <img
-            className="rounded-full w-20 h-20"
+            className="rounded-full w-20 h-20 select-none"
             src="https://api.dicebear.com/5.x/bottts/svg"
           />
 

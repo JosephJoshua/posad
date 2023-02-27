@@ -2,6 +2,7 @@ import dayjs from 'dayjs';
 import { onSnapshot, orderBy, query, where } from 'firebase/firestore';
 import { collectionGroups } from '../../libs/firebase';
 import ExpiringProduct from '../../types/ExpiringProduct';
+import { isProductExpired } from '../products-bought';
 
 export type ProductsWentBadDataPoint = {
   qty: number;
@@ -20,16 +21,13 @@ export const listenToExpiringProductsByExpirationDateAsc = (
     ),
     (snap) => {
       callback(
-        snap.docs.reduce<ExpiringProduct[]>(
-          (acc, doc) =>
-            doc.data().consumedAt != null
-              ? acc
-              : acc.concat({
-                  id: doc.id,
-                  ...doc.data(),
-                }),
-          []
-        )
+        snap.docs.reduce<ExpiringProduct[]>((acc, doc) => {
+          const product: ExpiringProduct = { id: doc.id, ...doc.data() };
+          const includeProduct =
+            !isProductExpired(product) && product.consumedAt == null;
+
+          return includeProduct ? acc.concat(product) : acc;
+        }, [])
       );
     }
   );
@@ -68,12 +66,7 @@ export const listenToProductsWentBadAggregation = (
         ProductsWentBadDataPoint[]
       >((acc, [date, products]) => {
         const wentBad = products.reduce<number>((acc, curr) => {
-          const isExpired = dayjs().isSameOrAfter(
-            dayjs(curr.expirationDate.toDate()),
-            'day'
-          );
-
-          if (isExpired && curr.consumedAt == null) return acc + 1;
+          if (isProductExpired(curr)) return acc + 1;
           return acc;
         }, 0);
 
