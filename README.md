@@ -1,6 +1,6 @@
 # Posad
 
-Po(tato) sa(lad) is an app that helps you with reducing your waste by keeping track of the expiration dates of the products that you buy.
+Po(tato) sa(la)d is an app that helps you with reducing your waste by keeping track of the expiration dates of the products that you buy.
 
 Demo: https://posad.vercel.app
 
