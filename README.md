@@ -9,6 +9,7 @@ Demo: https://posad.vercel.app
 - React.js
 - TypeScript
 - Vite
+- Firebase (auth & firestore)
 - Nx (monorepo)
 
 ## Getting Started
