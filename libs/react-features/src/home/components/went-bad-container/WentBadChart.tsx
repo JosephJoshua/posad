@@ -1,15 +1,17 @@
 import { useCallback, useMemo } from 'react';
 import { GridRows, GridColumns } from '@visx/grid';
-import { AreaClosed, Bar, Line, LinePath } from '@visx/shape';
+import { AreaClosed, Bar, LinePath } from '@visx/shape';
 import { scaleLinear, scaleTime } from '@visx/scale';
 import { bisector, extent, max } from 'd3-array';
 import { curveMonotoneX } from '@visx/curve';
 import { LinearGradient } from '@visx/gradient';
 import { Axis } from '@visx/axis';
 import { localPoint } from '@visx/event';
-import { TooltipWithBounds, withTooltip } from '@visx/tooltip';
+import { Tooltip, withTooltip } from '@visx/tooltip';
 import { roundDate } from '@posad/business-logic/utils';
+import { AnimatePresence, m } from 'framer-motion';
 import dayjs from 'dayjs';
+import clsx from 'clsx';
 
 export type DateRepresentation = 'date' | 'dayOfWeek' | 'month';
 
@@ -33,7 +35,12 @@ const bisectDate = bisector<WentBadDataPoint, Date>(getDate).left;
 const marginTop = 16;
 const marginLeft = 16;
 const marginRight = 16;
+
 const axisHeight = 50;
+
+const tooltipSpacing = 32;
+
+const AnimatedTooltip = m(Tooltip);
 
 const WentBadChart = withTooltip<WentBadChartProps, WentBadDataPoint>(
   ({
@@ -107,6 +114,11 @@ const WentBadChart = withTooltip<WentBadChartProps, WentBadDataPoint>(
       [valueScale, dateScale, showTooltip, data, dateRepresentation]
     );
 
+    const isDateHighlighted = (date: Date) => {
+      if (tooltipData == null) return false;
+      return dayjs(tooltipData.date).isSame(dayjs(date), 'day');
+    };
+
     return (
       <>
         <svg width={width} height={outerHeight}>
@@ -167,10 +179,10 @@ const WentBadChart = withTooltip<WentBadChartProps, WentBadDataPoint>(
             data={data}
             x={(d) => dateScale(d.date) ?? 0}
             y={(d) => valueScale(d.value) ?? 0}
+            curve={curveMonotoneX}
+            stroke="white"
             strokeWidth={3}
             shapeRendering="geometricPrecision"
-            stroke="white"
-            curve={curveMonotoneX}
           />
 
           <Axis
@@ -178,8 +190,12 @@ const WentBadChart = withTooltip<WentBadChartProps, WentBadDataPoint>(
             top={height + axisHeight / 2}
             numTicks={data.length}
             tickFormat={(val) => getDateRepresentation(val as Date)}
-            tickLabelProps={() => ({
-              className: 'text-base text-center fill-gray-200',
+            tickLabelProps={(date) => ({
+              className: clsx(
+                'text-base text-center',
+                'transition duration-200',
+                isDateHighlighted(date as Date) ? 'fill-white' : 'fill-gray-300'
+              ),
               textAnchor: 'middle',
             })}
             orientation="bottom"
@@ -200,40 +216,82 @@ const WentBadChart = withTooltip<WentBadChartProps, WentBadDataPoint>(
             onMouseLeave={() => hideTooltip()}
           />
 
-          {tooltipData && (
-            <g>
-              <Line
-                from={{ x: tooltipLeft, y: tooltipTop }}
-                to={{ x: tooltipLeft, y: height }}
-                className="stroke-primary-blue"
-                strokeWidth={2}
-                pointerEvents="none"
-                strokeDasharray="3,5"
-              />
+          <AnimatePresence>
+            {tooltipData && (
+              <m.g
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{
+                  duration: 0.2,
+                }}
+              >
+                <m.line
+                  initial={{
+                    x: tooltipLeft,
+                  }}
+                  animate={{
+                    x: tooltipLeft,
+                    y1: tooltipTop,
+                    y2: height,
+                  }}
+                  transition={{
+                    bounce: 0,
+                  }}
+                  className="stroke-primary-blue"
+                  strokeWidth={2}
+                  pointerEvents="none"
+                  strokeDasharray="3,5"
+                />
 
-              <circle
-                cx={tooltipLeft}
-                cy={tooltipTop}
-                r={8}
-                className="fill-primary-blue stroke-white"
-                strokeWidth={2}
-                pointerEvents="none"
-              />
-            </g>
-          )}
+                <m.circle
+                  animate={{
+                    cx: tooltipLeft,
+                    cy: tooltipTop,
+                  }}
+                  transition={{
+                    bounce: 0,
+                  }}
+                  r={8}
+                  className="fill-primary-blue stroke-white"
+                  strokeWidth={2}
+                  pointerEvents="none"
+                />
+              </m.g>
+            )}
+          </AnimatePresence>
         </svg>
 
-        {tooltipData && (
-          <div>
-            <TooltipWithBounds
-              top={tooltipTop - 56}
-              left={tooltipLeft - 32}
-              className="bg-primary-blue min-w-[48px] text-center origin-center border border-white text-white"
+        <AnimatePresence>
+          {tooltipData && (
+            <m.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{
+                duration: 0.2,
+              }}
             >
-              {getValue(tooltipData)}
-            </TooltipWithBounds>
-          </div>
-        )}
+              <AnimatedTooltip
+                initial={{
+                  top: tooltipTop - tooltipSpacing,
+                  left: tooltipLeft,
+                }}
+                animate={{
+                  top: tooltipTop - tooltipSpacing,
+                  left: tooltipLeft,
+                }}
+                className={clsx(
+                  'absolute translate-x-[-50%] translate-y-[-50%]',
+                  'bg-primary-blue border border-white text-white',
+                  'px-4 rounded-md text-center'
+                )}
+              >
+                {getValue(tooltipData)}
+              </AnimatedTooltip>
+            </m.div>
+          )}
+        </AnimatePresence>
       </>
     );
   }

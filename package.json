@@ -73,6 +73,7 @@
     "d3-array": "^3.2.2",
     "dayjs": "^1.11.7",
     "firebase": "^9.17.1",
+    "framer-motion": "^10.0.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.43.1",
