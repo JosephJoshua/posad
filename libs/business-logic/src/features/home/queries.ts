@@ -35,46 +35,76 @@ export const listenToExpiringProductsByExpirationDateAsc = (
 
 export const listenToProductsWentBadAggregation = (
   uid: string,
+  startDateArg: Date,
+  endDateArg: Date,
+  groupBy: 'day' | 'month',
   callback: (data: ProductsWentBadDataPoint[]) => void
 ) => {
+  const startDate = dayjs(startDateArg).startOf('day');
+  const endDate = dayjs(endDateArg).endOf('day');
+
   return onSnapshot(
     query(
       collectionGroups.expiringProducts,
       where('uid', '==', uid),
+      where('expirationDate', '>=', startDate.toDate()),
+      where('expirationDate', '<=', endDate.toDate()),
       orderBy('expirationDate', 'asc')
     ),
     (snap) => {
-      const products: Map<string, ExpiringProduct[]> = new Map();
+      const getGroupKey = (date: dayjs.Dayjs) => {
+        switch (groupBy) {
+          case 'day':
+            return date.format('DD-MM-YYYY');
 
-      snap.docs.forEach((doc) => {
-        const data = doc.data();
-        const expirationDate = dayjs(data.expirationDate.toDate())
-          .startOf('day')
-          .format();
+          case 'month':
+            return date.get('month');
 
-        const product = { ...data, id: doc.id };
-        const target = products.get(expirationDate);
-
-        if (target != null) {
-          products.set(expirationDate, [...target, product]);
-        } else {
-          products.set(expirationDate, [product]);
+          default:
+            return 0;
         }
-      });
+      };
 
-      const result = Array.from(products.entries()).reduce<
-        ProductsWentBadDataPoint[]
-      >((acc, [date, products]) => {
-        const wentBad = products.reduce<number>((acc, curr) => {
-          if (isProductExpired(curr)) return acc + 1;
-          return acc;
-        }, 0);
+      /**
+       * Group products based on their expiration dates.
+       */
+      const products = snap.docs.reduce<Record<string, ExpiringProduct[]>>(
+        (groups, current) => {
+          const data = current.data();
+          const key = getGroupKey(dayjs(data.expirationDate.toDate()));
 
-        return acc.concat({
+          const product: ExpiringProduct = { id: current.id, ...data };
+
+          return {
+            ...groups,
+            [key]: [...(groups[key] || []), product],
+          };
+        },
+        {}
+      );
+
+      const result: ProductsWentBadDataPoint[] = [];
+      let currentDate = startDate;
+
+      /**
+       * Generate a data point for every date in the date range.
+       */
+      while (endDate.isSameOrAfter(currentDate)) {
+        const countExpired = (total: number, current: ExpiringProduct) => {
+          if (isProductExpired(current)) return total + 1;
+          return total;
+        };
+
+        const group = products[getGroupKey(currentDate)];
+        const wentBad = group?.reduce<number>(countExpired, 0) ?? 0;
+
+        result.push({
           qty: wentBad,
-          date: dayjs(date).toDate(),
+          date: currentDate.startOf(groupBy).toDate(),
         });
-      }, []);
+
+        currentDate = currentDate.add(1, groupBy);
+      }
 
       callback(result);
     }

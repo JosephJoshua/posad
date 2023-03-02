@@ -53,6 +53,9 @@
         "libs/business-logic/src/libs/firebase/index.ts"
       ],
 
+      // business-logic/utils
+      "@posad/business-logic/utils": ["libs/business-logic/src/utils/index.ts"],
+
       // business-logic/features
       "@posad/business-logic/features/auth": [
         "libs/business-logic/src/features/auth/index.ts"
