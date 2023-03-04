@@ -14,6 +14,7 @@ import { useForm } from 'react-hook-form';
 
 type BaseFormProps = {
   onClose?: () => void;
+  className?: string;
 };
 
 type AddSectionFormProps = {
@@ -39,6 +40,7 @@ const SectionEntryForm: FC<ProductEntryFormProps> = ({
   sectionId,
   sectionBeforeId,
   action,
+  className,
 }) => {
   const { firebaseUser } = useAuthContext();
 
@@ -92,7 +94,8 @@ const SectionEntryForm: FC<ProductEntryFormProps> = ({
       className={clsx(
         'rounded-md border border-gray-200 pt-1 pb-2',
         'transition duration-200',
-        'focus-within:border-gray-500'
+        'focus-within:border-gray-500',
+        className
       )}
       ref={containerRef}
       onKeyUp={handleKeyDown}

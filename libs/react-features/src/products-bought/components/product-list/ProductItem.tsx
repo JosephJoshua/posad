@@ -11,6 +11,7 @@ import {
 import { useAuthContext } from '@posad/react-core/libs/firebase';
 import ProductEntryForm from './ProductEntryForm';
 import clsx from 'clsx';
+import { AnimatePresence, m } from 'framer-motion';
 
 export type ProductItemProps = {
   isEditing?: boolean;
@@ -62,16 +63,29 @@ const ProductItem: FC<ProductItemProps> = ({
   }, [isDone, firebaseUser, product]);
 
   return (
-    <div
-      className={clsx(
-        'flex border-b border-b-gray-200 pb-3 gap-4',
-        isEditing
-          ? 'flex-col items-stretch'
-          : 'justify-between items-center cursor-pointer'
-      )}
-    >
+    <AnimatePresence mode="wait">
       {!isEditing && (
-        <>
+        <m.div
+          className="flex border-b border-b-gray-200 pb-3 gap-4 justify-between items-center cursor-pointer"
+          key="product-item"
+          initial="hidden"
+          animate="shown"
+          exit="hidden"
+          variants={{
+            hidden: {
+              opacity: 0,
+              transition: {
+                duration: 0.05,
+              },
+            },
+            shown: {
+              opacity: 1,
+              transition: {
+                duration: 0.15,
+              },
+            },
+          }}
+        >
           <div className="flex items-center gap-4">
             <div className="flex items-center">
               <div className="bg-white rounded-full w-5 h-5 flex flex-shrink-0 justify-center items-center relative">
@@ -122,27 +136,44 @@ const ProductItem: FC<ProductItemProps> = ({
               onClick={() => onDelete()}
             />
           </div>
-        </>
+        </m.div>
       )}
 
       {isEditing && (
-        <ProductEntryForm
-          action="edit"
-          onClose={() => onEditStop()}
-          productIdentifier={product}
-          initialValues={{
-            name: product.name,
-            expirationDate: product.expirationDate.toDate(),
-            image: {
-              path: product.imageUrl,
-              source: product.imageSource,
-              url: imageUrl,
-              originalFileName: product.imageUrl.split('/').pop(),
+        <m.div
+          key="edit-form"
+          initial="hidden"
+          animate="shown"
+          exit="hidden"
+          variants={{
+            hidden: {
+              opacity: 0,
+              height: 70,
+            },
+            shown: {
+              opacity: 1,
+              height: 'auto',
             },
           }}
-        />
+        >
+          <ProductEntryForm
+            action="edit"
+            onClose={() => onEditStop()}
+            productIdentifier={product}
+            initialValues={{
+              name: product.name,
+              expirationDate: product.expirationDate.toDate(),
+              image: {
+                path: product.imageUrl,
+                source: product.imageSource,
+                url: imageUrl,
+                originalFileName: product.imageUrl.split('/').pop(),
+              },
+            }}
+          />
+        </m.div>
       )}
-    </div>
+    </AnimatePresence>
   );
 };
 

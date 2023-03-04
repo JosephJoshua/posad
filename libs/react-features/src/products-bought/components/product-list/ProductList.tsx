@@ -10,7 +10,8 @@ import {
   listenToAllProducts,
   SectionWithProducts,
 } from '@posad/business-logic/features/products-bought';
-import ProductSectionItem from './ProductSection';
+import ProductSectionItem from './ProductSectionItem';
+import { AnimatePresence, m } from 'framer-motion';
 
 const ProductList: FC = () => {
   const { firebaseUser } = useAuthContext();
@@ -84,28 +85,39 @@ const ProductList: FC = () => {
 
       {!isEmpty && (
         <ul className="mt-8 flex flex-col gap-6">
-          {data.map((section) => (
-            <li key={section.id}>
-              <ProductSectionItem
-                section={section}
-                isAddingProduct={sectionAddingProduct === section.id}
-                isAddingSection={sectionAdding === section.id}
-                onAddProductChange={(val) =>
-                  setSectionAddingProduct(val ? section.id : null)
-                }
-                onAddSectionChange={(val) =>
-                  setSectionAdding(val ? section.id : null)
-                }
-                onDeleteSection={() => setSectionToDelete(section.id)}
-                itemProps={(product) => ({
-                  onEdit: () => setProductToEdit(product.id),
-                  onDelete: () => setProductToDelete(product),
-                  onEditStop: () => setProductToEdit(null),
-                  isEditing: productToEdit === product.id,
-                })}
-              />
-            </li>
-          ))}
+          <AnimatePresence>
+            {data.map((section) => (
+              <m.li
+                key={section.id}
+                initial={{ opacity: 0, height: 0 }}
+                animate={{
+                  opacity: 1,
+                  height: 'auto',
+                  transition: { delay: 0.25 },
+                }}
+                exit={{ opacity: 0, height: 0 }}
+              >
+                <ProductSectionItem
+                  section={section}
+                  isAddingProduct={sectionAddingProduct === section.id}
+                  isAddingSection={sectionAdding === section.id}
+                  onAddProductChange={(val) =>
+                    setSectionAddingProduct(val ? section.id : null)
+                  }
+                  onAddSectionChange={(val) =>
+                    setSectionAdding(val ? section.id : null)
+                  }
+                  onDeleteSection={() => setSectionToDelete(section.id)}
+                  itemProps={(product) => ({
+                    onEdit: () => setProductToEdit(product.id),
+                    onDelete: () => setProductToDelete(product),
+                    onEditStop: () => setProductToEdit(null),
+                    isEditing: productToEdit === product.id,
+                  })}
+                />
+              </m.li>
+            ))}
+          </AnimatePresence>
         </ul>
       )}
 

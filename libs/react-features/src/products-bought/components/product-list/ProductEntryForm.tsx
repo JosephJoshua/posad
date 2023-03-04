@@ -22,6 +22,7 @@ import { ExpiringProduct } from '@posad/business-logic/types';
 
 type BaseFormProps = {
   onClose?: () => void;
+  className?: string;
 };
 
 type AddProductFormProps = {
@@ -44,6 +45,7 @@ const ProductEntryForm: FC<ProductEntryFormProps> = ({
   initialValues,
   productIdentifier,
   action,
+  className,
 }) => {
   const { firebaseUser } = useAuthContext();
 
@@ -111,7 +113,8 @@ const ProductEntryForm: FC<ProductEntryFormProps> = ({
       className={clsx(
         'rounded-md border border-gray-200 pt-1 pb-2',
         'transition duration-200',
-        'focus-within:border-gray-500'
+        'focus-within:border-gray-500',
+        className
       )}
       ref={containerRef}
       onKeyUp={handleKeyDown}
