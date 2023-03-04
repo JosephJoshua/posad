@@ -8,6 +8,7 @@ import {
   getFirestore,
 } from 'firebase/firestore';
 import { getStorage, ref } from 'firebase/storage';
+import { getMessaging, getToken } from 'firebase/messaging';
 import { ExpiringProduct, ExpiringProductSection, User } from '../../types';
 import UserDataOrder from '../../types/UserDataOrder';
 
@@ -85,6 +86,27 @@ export const storage = getStorage(firebase);
 export const storageRefs = {
   expiringProductImages: (uid: string, imageId: string) =>
     ref(storage, `users/${uid}/expiring-product-images/${imageId}`),
+};
+
+/**
+ * -- Cloud Messaging
+ */
+export const messaging = getMessaging(firebase);
+
+export const requestForMessagingToken = () => {
+  return getToken(messaging, {
+    vapidKey:
+      'BAK7mWPmC5y-3D58roOHd1WBIFT1_LPwTWDkVidLPjONmHitzOAaa1hrNnEJdXXVxU2pFu5uD3ODPzO5exw9la0',
+  }).then((token) => {
+    console.log('getToken');
+    if (token) {
+      console.log(token);
+      return token;
+    }
+
+    console.error('No token available!');
+    return null;
+  });
 };
 
 export * from './errors';

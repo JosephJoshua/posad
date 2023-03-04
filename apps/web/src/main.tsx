@@ -1,10 +1,8 @@
-import { AuthContextProvider } from '@posad/react-core/libs/firebase';
 import { initDayjs } from '@posad/react-core/libs/dayjs';
 import { StrictMode } from 'react';
-import { RouterProvider } from 'react-router-dom';
-import router from './router';
-import { LazyMotion, domAnimation } from 'framer-motion';
 import * as ReactDOM from 'react-dom/client';
+import { requestForMessagingToken } from '@posad/business-logic/libs/firebase';
+import App from './App';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -12,12 +10,13 @@ const root = ReactDOM.createRoot(
 
 initDayjs();
 
+/**
+ * TODO: add custom modal to ask for notification permissions.
+ */
+requestForMessagingToken();
+
 root.render(
   <StrictMode>
-    <LazyMotion features={domAnimation} strict>
-      <AuthContextProvider>
-        <RouterProvider router={router} />
-      </AuthContextProvider>
-    </LazyMotion>
+    <App />
   </StrictMode>
 );
