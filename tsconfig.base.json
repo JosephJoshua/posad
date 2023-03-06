@@ -15,48 +15,6 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      // react-core/components
-      "@posad/react-core/components/button": [
-        "libs/react-core/src/components/button/index.ts"
-      ],
-      "@posad/react-core/components/icon-button": [
-        "libs/react-core/src/components/icon-button/index.ts"
-      ],
-      "@posad/react-core/components/input": [
-        "libs/react-core/src/components/input/index.ts"
-      ],
-      "@posad/react-core/components/simple-dialog": [
-        "libs/react-core/src/components/simple-dialog/index.ts"
-      ],
-      "@posad/react-core/components/loading-page": [
-        "libs/react-core/src/components/loading-page/index.ts"
-      ],
-
-      // react-core/hooks
-      "@posad/react-core/hooks": ["libs/react-core/src/hooks/index.ts"],
-
-      // react-core/layouts
-      "@posad/react-core/layouts/dashboard": [
-        "libs/react-core/src/layouts/dashboard/index.ts"
-      ],
-
-      // react-core/libs
-      "@posad/react-core/libs/dayjs": [
-        "libs/react-core/src/libs/dayjs/index.ts"
-      ],
-      "@posad/react-core/libs/firebase": [
-        "libs/react-core/src/libs/firebase/index.ts"
-      ],
-
-      // business-logic/libs
-      "@posad/business-logic/libs/firebase": [
-        "libs/business-logic/src/libs/firebase/index.ts"
-      ],
-
-      // business-logic/utils
-      "@posad/business-logic/utils": ["libs/business-logic/src/utils/index.ts"],
-
-      // business-logic/features
       "@posad/business-logic/features/auth": [
         "libs/business-logic/src/features/auth/index.ts"
       ],
@@ -66,11 +24,36 @@
       "@posad/business-logic/features/products-bought": [
         "libs/business-logic/src/features/products-bought/index.ts"
       ],
-
-      // business-logic/types
+      "@posad/business-logic/libs/firebase": [
+        "libs/business-logic/src/libs/firebase/index.ts"
+      ],
       "@posad/business-logic/types": ["libs/business-logic/src/types/index.ts"],
-
-      // react-features
+      "@posad/business-logic/utils": ["libs/business-logic/src/utils/index.ts"],
+      "@posad/react-core/components/button": [
+        "libs/react-core/src/components/button/index.ts"
+      ],
+      "@posad/react-core/components/icon-button": [
+        "libs/react-core/src/components/icon-button/index.ts"
+      ],
+      "@posad/react-core/components/input": [
+        "libs/react-core/src/components/input/index.ts"
+      ],
+      "@posad/react-core/components/loading-page": [
+        "libs/react-core/src/components/loading-page/index.ts"
+      ],
+      "@posad/react-core/components/simple-dialog": [
+        "libs/react-core/src/components/simple-dialog/index.ts"
+      ],
+      "@posad/react-core/hooks": ["libs/react-core/src/hooks/index.ts"],
+      "@posad/react-core/layouts/dashboard": [
+        "libs/react-core/src/layouts/dashboard/index.ts"
+      ],
+      "@posad/react-core/libs/dayjs": [
+        "libs/react-core/src/libs/dayjs/index.ts"
+      ],
+      "@posad/react-core/libs/firebase": [
+        "libs/react-core/src/libs/firebase/index.ts"
+      ],
       "@posad/react-features/home": ["libs/react-features/src/home/index.ts"],
       "@posad/react-features/products-bought": [
         "libs/react-features/src/products-bought/index.ts"
