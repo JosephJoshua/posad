@@ -15,6 +15,9 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@posad/business-logic/constants": [
+        "libs/business-logic/src/constants/index.ts"
+      ],
       "@posad/business-logic/features/auth": [
         "libs/business-logic/src/features/auth/index.ts"
       ],
@@ -23,6 +26,12 @@
       ],
       "@posad/business-logic/features/products-bought": [
         "libs/business-logic/src/features/products-bought/index.ts"
+      ],
+      "@posad/business-logic/features/notifications": [
+        "libs/business-logic/src/features/notifications/index.ts"
+      ],
+      "@posad/business-logic/libs/dayjs": [
+        "libs/business-logic/src/libs/dayjs/index.ts"
       ],
       "@posad/business-logic/libs/firebase": [
         "libs/business-logic/src/libs/firebase/index.ts"
@@ -47,9 +56,6 @@
       "@posad/react-core/hooks": ["libs/react-core/src/hooks/index.ts"],
       "@posad/react-core/layouts/dashboard": [
         "libs/react-core/src/layouts/dashboard/index.ts"
-      ],
-      "@posad/react-core/libs/dayjs": [
-        "libs/react-core/src/libs/dayjs/index.ts"
       ],
       "@posad/react-core/libs/firebase": [
         "libs/react-core/src/libs/firebase/index.ts"

@@ -5,12 +5,21 @@ import {
   collectionGroup,
   CollectionReference,
   DocumentData,
+  Firestore,
   getFirestore,
 } from 'firebase/firestore';
+import { Firestore as AdminFirestore } from 'firebase-admin/firestore';
 import { getStorage, ref } from 'firebase/storage';
 import { getMessaging, getToken } from 'firebase/messaging';
 import { ExpiringProduct, ExpiringProductSection, User } from '../../types';
 import UserDataOrder from '../../types/UserDataOrder';
+import { addMessagingToken } from '../../features/notifications/mutations';
+import {
+  EXPIRING_PRODUCTS_COL,
+  EXPIRING_PRODUCT_SECTIONS_COL,
+  USERS_COL,
+  USER_DATA_ORDERS_COL,
+} from '../../constants';
 
 const config = {
   apiKey: 'AIzaSyD9gRTS4ogqkDA98AwCKpt4x6wp-OHXz_A',
@@ -47,11 +56,6 @@ const createCollection = <T = DocumentData>(
 const createCollectionGroup = <T = DocumentData>(id: string) => {
   return collectionGroup(db, id) as CollectionReference<T>;
 };
-
-const USERS_COL = 'users';
-const EXPIRING_PRODUCT_SECTIONS_COL = 'expiring-product-sections';
-const EXPIRING_PRODUCTS_COL = 'expiring-products';
-const USER_DATA_ORDERS_COL = 'user-data-orders';
 
 export const collections = {
   users: createCollection<Omit<User, 'id'>>(USERS_COL),
@@ -98,13 +102,13 @@ export const requestForMessagingToken = () => {
     vapidKey:
       'BAK7mWPmC5y-3D58roOHd1WBIFT1_LPwTWDkVidLPjONmHitzOAaa1hrNnEJdXXVxU2pFu5uD3ODPzO5exw9la0',
   }).then((token) => {
-    console.log('getToken');
     if (token) {
-      console.log(token);
+      const { currentUser } = auth;
+
+      if (currentUser != null) addMessagingToken(currentUser.uid, token);
       return token;
     }
 
-    console.error('No token available!');
     return null;
   });
 };

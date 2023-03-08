@@ -60,6 +60,7 @@ export const authenticateWithGoogle = async () => {
         name: user.displayName ?? '',
         email: user.email ?? '',
         authProvider: 'google',
+        messagingTokens: [],
       });
 
       addInitialExpiringProductSection(user.uid, batch);
@@ -90,6 +91,7 @@ export const registerWithCredentials = async (
       name: credentials.name,
       email: credentials.email,
       authProvider: 'email',
+      messagingTokens: [],
     });
 
     addInitialExpiringProductSection(uid, batch);

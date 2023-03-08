@@ -1,4 +1,4 @@
-import { initDayjs } from '@posad/react-core/libs/dayjs';
+import { initDayjs } from '@posad/business-logic/libs/dayjs';
 import { StrictMode } from 'react';
 import * as ReactDOM from 'react-dom/client';
 import { requestForMessagingToken } from '@posad/business-logic/libs/firebase';

@@ -74,6 +74,7 @@
     "@react-hook/resize-observer": "^1.2.6",
     "@swc/helpers": "~0.4.11",
     "@tabler/icons-react": "^2.4.0",
+    "@vercel/node": "^2.9.10",
     "@visx/axis": "^3.0.1",
     "@visx/curve": "^3.0.0",
     "@visx/event": "^3.0.1",

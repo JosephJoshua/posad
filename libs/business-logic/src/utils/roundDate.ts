@@ -3,7 +3,7 @@ import dayjs from 'dayjs';
 const roundDate = (date: Date, unit: 'day' | 'month'): Date => {
   switch (unit) {
     case 'day': {
-      const d = dayjs(date).minute(0).second(0).millisecond(0).add(0.5, 'days');
+      const d = dayjs(date).startOf('hour').add(0.5, 'days');
       return d.hour(0).toDate();
     }
 
