@@ -77,6 +77,11 @@ const generateExpiringMessages = async (
         body: `${data.name} is expiring in ${expiringIn}. Go check on it now!`,
         title: `Expiring soon - ${data.name}`,
       },
+      webpush: {
+        fcmOptions: {
+          link: 'https://posad.vercel.app/products-bought',
+        },
+      },
     }));
 
     messages.push(...newMessages);
@@ -146,7 +151,7 @@ const handler = async (_: VercelRequest, res: VercelResponse) => {
   );
 
   await messaging.sendAll(messages);
-  res.status(200);
+  res.status(200).end();
 };
 
 export default handler;
