@@ -1,10 +1,4 @@
-import {
-  addDoc,
-  deleteDoc,
-  doc,
-  serverTimestamp,
-  updateDoc,
-} from 'firebase/firestore';
+import { addDoc, deleteDoc, doc, updateDoc } from 'firebase/firestore';
 import { getDownloadURL, uploadBytesResumable } from 'firebase/storage';
 import { collections, storageRefs } from '../../../libs/firebase';
 import { ExpiringProduct } from '../../../types';
@@ -16,11 +10,15 @@ export type ProductIdentifier = {
   productId: string;
 };
 
-export type AddProductPayload = Omit<ExpiringProduct, 'id' | 'consumedAt'>;
+export type AddProductPayload = Omit<
+  ExpiringProduct,
+  'id' | 'consumedAt' | 'isConsumed'
+>;
+
 export type EditProductPayload = Required<
   Pick<ExpiringProduct, 'id' | 'sectionId'>
 > &
-  Partial<Omit<ExpiringProduct, 'id' | 'sectionId'>>;
+  Partial<Omit<ExpiringProduct, 'id' | 'sectionId' | 'isConsumed'>>;
 
 export type DeleteProductPayload = ProductIdentifier;
 export type CompleteProductPayload = ProductIdentifier;
@@ -31,7 +29,10 @@ export type UploadProductImageResult = {
 };
 
 export const addProduct = async (uid: string, payload: AddProductPayload) => {
-  return addDoc(collections.expiringProducts(uid, payload.sectionId), payload);
+  return addDoc(collections.expiringProducts(uid, payload.sectionId), {
+    ...payload,
+    isConsumed: false,
+  });
 };
 
 export const editProduct = async (uid: string, payload: EditProductPayload) => {
@@ -75,6 +76,7 @@ export const completeProduct = async (
     ),
     {
       consumedAt: now,
+      isConsumed: true,
       isOnTime: !isExpired(now),
     }
   );

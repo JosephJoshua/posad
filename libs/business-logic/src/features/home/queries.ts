@@ -13,21 +13,22 @@ export const listenToExpiringProductsByExpirationDateAsc = (
   uid: string,
   callback: (products: ExpiringProduct[]) => void
 ) => {
+  const minExpirationDate = dayjs().startOf('day').toDate();
+
   return onSnapshot(
     query(
       collectionGroups.expiringProducts,
       where('uid', '==', uid),
+      where('isConsumed', '==', false),
+      where('expirationDate', '>', minExpirationDate),
       orderBy('expirationDate', 'asc')
     ),
     (snap) => {
       callback(
-        snap.docs.reduce<ExpiringProduct[]>((acc, doc) => {
-          const product: ExpiringProduct = { id: doc.id, ...doc.data() };
-          const includeProduct =
-            !isProductExpired(product) && product.consumedAt == null;
-
-          return includeProduct ? acc.concat(product) : acc;
-        }, [])
+        snap.docs.map<ExpiringProduct>((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }))
       );
     }
   );

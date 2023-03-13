@@ -9,7 +9,9 @@ type ExpiringProduct = {
   name: string;
   imageUrl: string;
   imageSource: (typeof ExpiringProductImageSources)[number];
+  isConsumed: boolean;
   expirationDate: Timestamp;
+  lastNotified?: Timestamp;
   consumedAt?: Timestamp;
   isOnTime?: boolean;
 };

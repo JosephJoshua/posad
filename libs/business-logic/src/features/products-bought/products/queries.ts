@@ -54,20 +54,18 @@ export const listenToAllProducts = (
       onCallback();
     }),
     onSnapshot(
-      query(collectionGroups.expiringProducts, where('uid', '==', uid)),
+      query(
+        collectionGroups.expiringProducts,
+        where('uid', '==', uid),
+        where('isConsumed', '==', false)
+      ),
       (snap) => {
         products.splice(0, products.length);
         products.push(
-          ...snap.docs.reduce<ExpiringProduct[]>(
-            (acc, doc) =>
-              doc.data().consumedAt != null
-                ? acc
-                : acc.concat({
-                    id: doc.id,
-                    ...doc.data(),
-                  }),
-            []
-          )
+          ...snap.docs.map<ExpiringProduct>((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          }))
         );
 
         onCallback();

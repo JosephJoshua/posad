@@ -11,7 +11,6 @@ import notify from './utils/notify';
 
 onMessage(messaging, (payload) => {
   const { notification } = payload;
-  console.log(payload);
 
   if (notification == null) return;
 

@@ -8,7 +8,7 @@ const roundDate = (date: Date, unit: 'day' | 'month'): Date => {
     }
 
     case 'month': {
-      const d = dayjs(roundDate(date, 'day')).add(0.5, 'months');
+      const d = dayjs(date).startOf('day').add(0.5, 'months');
       return d.date(0).toDate();
     }
 
