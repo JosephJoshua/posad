@@ -128,7 +128,7 @@ const ProductEntryForm: FC<ProductEntryFormProps> = ({
           autoFocus
         />
 
-        <div className="flex gap-2 mt-2 max-w-full">
+        <div className="flex gap-2 mt-2 max-w-full flex-col md:flex-row">
           <Controller
             control={control}
             name="image"
@@ -148,6 +148,7 @@ const ProductEntryForm: FC<ProductEntryFormProps> = ({
                       />
                     )
                   }
+                  labelPosition="side"
                   iconPosition="right"
                   label={
                     value?.originalFileName == null
@@ -182,7 +183,7 @@ const ProductEntryForm: FC<ProductEntryFormProps> = ({
                   'placeholder:text-slate-500 placeholder:font-normal enabled:hover:placeholder:text-primary-blue',
                   'group-hover:bg-gray-100'
                 )}
-                toggleClassName={'text-primary-blue'}
+                toggleClassName="text-primary-blue"
                 placeholder="Expiration date"
                 value={{
                   startDate: value,

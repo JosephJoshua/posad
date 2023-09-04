@@ -7,12 +7,21 @@ export type IconButtonProps = ButtonProps & {
   icon: Icon | ReactElement;
   iconPosition?: 'left' | 'right';
   label: string;
+  labelPosition?: 'side' | 'center';
   showLabel?: boolean;
 };
 
 const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
   (
-    { icon, label, showLabel, className, iconPosition = 'left', ...props },
+    {
+      icon,
+      label,
+      showLabel,
+      className,
+      iconPosition = 'left',
+      labelPosition = 'center',
+      ...props
+    },
     ref
   ) => {
     const IconComponent = icon;
@@ -20,10 +29,20 @@ const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
     return (
       <Button
         {...props}
-        className={clsx('gap-3', props.variant == null && '!p-0', className)}
+        className={clsx(
+          'gap-3 justify-between',
+          props.variant == null && '!p-0',
+          className
+        )}
         aria-label={!showLabel ? label : undefined}
         ref={ref}
       >
+        {labelPosition === 'center' && (
+          <div
+            className={iconPosition === 'left' ? 'order-3' : 'order-1'}
+          ></div>
+        )}
+
         {showLabel && (
           <span
             className={clsx(

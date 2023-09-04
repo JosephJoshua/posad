@@ -28,9 +28,9 @@ const ProductCard: FC<ProductCardProps> = ({ product }) => {
         alt=""
       />
 
-      <div className="flex justify-between px-1">
+      <div className="flex justify-between items-center px-1 gap-4">
         <span>{product.name}</span>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 whitespace-nowrap">
           <IconClock />
           <span>{dayjs(product.expirationDate.toDate()).fromNow()}</span>
         </div>

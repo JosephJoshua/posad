@@ -4,7 +4,7 @@ import { ButtonHTMLAttributes, DetailedHTMLProps, forwardRef } from 'react';
 import { ReactComponent as DotsSpinner } from '../../../assets/spinners/dots.svg';
 
 export type ButtonVariants = 'filled' | 'outlined' | 'ghost' | 'filled-ghost';
-export type ButtonSizes = 'base' | 'sm';
+export type ButtonSizes = 'base' | 'sm' | 'lg';
 
 type ButtonAttributes = DetailedHTMLProps<
   ButtonHTMLAttributes<HTMLButtonElement>,
@@ -64,11 +64,13 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     const sizeStyles: Record<ButtonSizes, string> = {
       base: clsx('text-base'),
       sm: clsx('text-sm'),
+      lg: clsx('text-lg'),
     };
 
     const sizeSpinnerStyles: Record<ButtonSizes, string> = {
       base: clsx('h-[24px]'),
       sm: clsx('h-[20px]'),
+      lg: clsx('h-[28px]'),
     };
 
     return (

@@ -110,7 +110,7 @@ const ProductSectionItem: FC<ProductSectionItemProps> = ({
   const addSectionForm = !isAddingSection ? (
     <m.button
       className={clsx(
-        'w-full opacity-0 cursor-pointer',
+        'w-full md:opacity-0 cursor-pointer text-gray-500 md:text-primary-blue',
         'transition duration-300',
         'hover:opacity-100'
       )}
@@ -119,9 +119,9 @@ const ProductSectionItem: FC<ProductSectionItemProps> = ({
       onClick={() => onAddSectionChange(true)}
     >
       <div className="flex items-center gap-4 select-none">
-        <div className="flex-1 h-px bg-primary-blue"></div>
+        <div className="flex-1 h-px bg-primary-blue/60 md:bg-primary-blue"></div>
         <div>Add section</div>
-        <div className="flex-1 h-px bg-primary-blue"></div>
+        <div className="flex-1 h-px bg-primary-blue/60 md:bg-primary-blue"></div>
       </div>
     </m.button>
   ) : (

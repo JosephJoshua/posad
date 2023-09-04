@@ -192,8 +192,12 @@ const WentBadChart = withTooltip<WentBadChartProps, WentBadDataPoint>(
             tickFormat={(val) => getDateRepresentation(val as Date)}
             tickLabelProps={(date) => ({
               className: clsx(
-                'text-base text-center',
+                'text-center',
                 'transition duration-200',
+                data.length > 14 && 'hidden md:block',
+                data.length > 10
+                  ? 'text-xs lg:text-sm xl:text-base'
+                  : 'text-base',
                 isDateHighlighted(date as Date) ? 'fill-white' : 'fill-gray-300'
               ),
               textAnchor: 'middle',
